@@ -17,12 +17,7 @@
     "default": {
       "runner": "@nrwl/nx-cloud",
       "options": {
-        "cacheableOperations": [
-          "build",
-          "lint",
-          "test",
-          "e2e"
-        ],
+        "cacheableOperations": ["build", "lint", "test", "e2e"],
         "accessToken": "ZWZjYTM1Y2UtMTc1ZS00ZWI0LTkwNTUtN2UzM2YwZWRhZjNkfHJlYWQtd3JpdGU="
       }
     }
@@ -35,5 +30,18 @@
       }
     ]
   },
-  "defaultProject": "backend"
+  "defaultProject": "backend",
+  "generators": {
+    "@nrwl/react": {
+      "application": {
+        "babel": true
+      }
+    },
+    "@nrwl/next": {
+      "application": {
+        "style": "@emotion/styled",
+        "linter": "eslint"
+      }
+    }
+  }
 }

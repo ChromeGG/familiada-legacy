@@ -27,7 +27,7 @@ export class GamesGateway {
   }
 
   async handleConnection(client: Socket, ...args: any[]) {
-    console.log(await this.server.fetchSockets())
+    // console.log(await this.server.fetchSockets())
     console.log(`Client connected: ${client.id}`);
    }
 }

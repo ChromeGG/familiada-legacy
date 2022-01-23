@@ -10,4 +10,9 @@ export class AppController {
   getData() {
     return this.appService.getData();
   }
+
+  @Get('/games/create')
+  createGame() {
+    return this.appService.createGame();
+  }
 }

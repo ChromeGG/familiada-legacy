@@ -5,18 +5,26 @@ import Script from 'next/script';
 import axios from 'axios';
 
 export function Index() {
-  // const [socket, setSocket] = useState<Socket>(null);
+  const [socket, setSocket] = useState<Socket>(null);
   const [gameId, setGameId] = useState('');
   const [insertedGameId, setInsertedGameId] = useState('');
   const [userName, setUserName] = useState('');
   const [users, setUsers] = useState([]);
 
-  // useEffect(() => {
-  //   const newSocket = io(`http://${window.location.hostname}:3333`);
-  //   // newSocket.
-  //   setSocket(newSocket);
-  //   return () => newSocket.close();
-  // }, [setSocket]);
+  useEffect(() => {
+    const newSocket = io(`http://${window.location.hostname}:3333`);
+    // newSocket.
+    setSocket(newSocket);
+    console.log('NEW SOCKET')
+
+    newSocket.on('userJoinedToGame', (sth) => {
+      console.log('on User join', sth)
+      setUsers(prevUsers => [...prevUsers, sth])
+    })
+    return () => newSocket.close();
+  }, [setSocket, users]);
+
+
 
   const createGame = async () => {
     const { data } = await axios(`http://localhost:3333/api/games/create`);
@@ -58,7 +66,9 @@ export function Index() {
         </>
       )}
       <Typography>List of users in Game:</Typography>
-      {users}
+      <ul>
+        {users.map(name => {return <li key={name}>{name}</li>})}
+      </ul>
     </div>
   );
 }

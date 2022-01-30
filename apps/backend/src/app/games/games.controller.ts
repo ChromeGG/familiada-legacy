@@ -1,3 +1,4 @@
+import { User } from '@familiada/interfaces';
 import { Body, Controller, Get, Post } from '@nestjs/common';
 
 import { Socket } from 'socket.io';
@@ -25,10 +26,8 @@ export class GamesController {
   }
 
   @Post('/join')
-  joinToGame(@Body() {gameId, userName}: {gameId: string, userName: string}) {
-    console.log(gameId)
-    // ! TODO server is null, fix it
-    this.gamesGateway.server.emit('userJoinedToGame', userName);
-    return gameId
+  joinToGame(@Body() user: User) {
+    this.gamesGateway.server.emit('userJoinedToGame', user);
+    return user
   }
 }

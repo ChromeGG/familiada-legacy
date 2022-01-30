@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Button, Grid, Typography, Divider, TextField } from '@mui/material';
 import io, { Socket } from 'socket.io-client';
 import Script from 'next/script';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
+import { User } from '@familiada/interfaces';
 
 export function Index() {
   const [socket, setSocket] = useState<Socket>(null);
@@ -34,9 +35,9 @@ export function Index() {
   };
 
   const joinToGame = async () => {
-    const {data} = await axios.post(`http://localhost:3333/api/games/join`, {
-      gameId: insertedGameId,
-      userName,
+    // const use
+    const {data} = await axios.post<User, AxiosResponse<User>, User>(`http://localhost:3333/api/games/join`, {
+      name: userName,
     })
     console.log(data);
     // setGameId(data.id)

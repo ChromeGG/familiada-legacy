@@ -1,9 +1,6 @@
-
-
 # Familiada
 
 App inspired by Familiada - the Polish version of Family Feud.
-
 
 ## Running application
 
@@ -81,4 +78,3 @@ Run `npx nx affected:e2e` to execute the end-to-end tests affected by a change.
 ## Understand your workspace
 
 Run `npx nx dep-graph` to see a diagram of the dependencies of your projects.
-

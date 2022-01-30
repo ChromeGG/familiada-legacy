@@ -3,9 +3,9 @@ export function interfaces(): string {
 }
 
 export interface User {
-  name: string
+  name: string;
 }
 
 export interface Game {
-  id: string
+  id: string;
 }

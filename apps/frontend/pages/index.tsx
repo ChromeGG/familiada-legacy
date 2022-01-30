@@ -16,16 +16,14 @@ export function Index() {
     const newSocket = io(`http://${window.location.hostname}:3333`);
     // newSocket.
     setSocket(newSocket);
-    console.log('NEW SOCKET')
+    console.log('NEW SOCKET');
 
     newSocket.on('userJoinedToGame', (sth) => {
-      console.log('on User join', sth)
-      setUsers(prevUsers => [...prevUsers, sth])
-    })
+      console.log('on User join', sth);
+      setUsers((prevUsers) => [...prevUsers, sth]);
+    });
     return () => newSocket.close();
   }, [setSocket, users]);
-
-
 
   const createGame = async () => {
     const { data } = await axios(`http://localhost:3333/api/games/create`);
@@ -36,9 +34,12 @@ export function Index() {
 
   const joinToGame = async () => {
     // const use
-    const {data} = await axios.post<User, AxiosResponse<User>, User>(`http://localhost:3333/api/games/join`, {
-      name: userName,
-    })
+    const { data } = await axios.post<User, AxiosResponse<User>, User>(
+      `http://localhost:3333/api/games/join`,
+      {
+        name: userName,
+      }
+    );
     console.log(data);
     // setGameId(data.id)
   };
@@ -61,14 +62,26 @@ export function Index() {
       <div>GameId: {gameId}</div>
       {gameId && (
         <>
-          <TextField value={insertedGameId} label="Game ID" onChange={handleChange} />
-          <TextField value={userName} label="user name" onChange={handleUserNameChange} />
-          <Button variant="contained" onClick={() => joinToGame()}>JOIN</Button>
+          <TextField
+            value={insertedGameId}
+            label="Game ID"
+            onChange={handleChange}
+          />
+          <TextField
+            value={userName}
+            label="user name"
+            onChange={handleUserNameChange}
+          />
+          <Button variant="contained" onClick={() => joinToGame()}>
+            JOIN
+          </Button>
         </>
       )}
       <Typography>List of users in Game:</Typography>
       <ul>
-        {users.map(name => {return <li key={name}>{name}</li>})}
+        {users.map((name) => {
+          return <li key={name}>{name}</li>;
+        })}
       </ul>
     </div>
   );

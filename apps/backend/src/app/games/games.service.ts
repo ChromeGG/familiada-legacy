@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import {randomBytes} from 'crypto';
+import { randomBytes } from 'crypto';
 
 @Injectable()
 export class GamesService {
@@ -8,8 +8,8 @@ export class GamesService {
   }
 
   createGame() {
-    const id = randomBytes(3).toString('hex')
-    
-    return {id}
+    const id = randomBytes(3).toString('hex');
+
+    return { id };
   }
 }

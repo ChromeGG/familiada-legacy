@@ -7,13 +7,15 @@ import { GamesService } from './games.service';
 
 @Controller('/games')
 export class GamesController {
-  constructor(private readonly gamesService: GamesService, private gamesGateway: GamesGateway) {}
-
+  constructor(
+    private readonly gamesService: GamesService,
+    private gamesGateway: GamesGateway
+  ) {}
 
   async handleConnection(client: Socket, ...args: any[]) {
     // console.log(await this.server.fetchSockets())
     console.log(`Client connected: ${client.id}`);
-   }
+  }
 
   @Get()
   getData() {
@@ -28,6 +30,6 @@ export class GamesController {
   @Post('/join')
   joinToGame(@Body() user: User) {
     this.gamesGateway.server.emit('userJoinedToGame', user);
-    return user
+    return user;
   }
 }

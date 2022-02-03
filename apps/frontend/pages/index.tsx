@@ -51,7 +51,7 @@ export function Index() {
     setUserName(event.target.value);
   };
 
-  // !! NEXT: See example with rooms https://www.youtube.com/watch?v=ZKEqqIO7n-k
+  console.log('test');
 
   return (
     <div>

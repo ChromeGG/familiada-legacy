@@ -1,11 +1,11 @@
 export function interfaces(): string {
-  return 'interfaces';
+  return 'interfaces'
 }
 
 export interface User {
-  name: string;
+  name: string
 }
 
 export interface Game {
-  id: string;
+  id: string
 }

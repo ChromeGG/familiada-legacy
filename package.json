@@ -4,6 +4,7 @@
   "license": "MIT",
   "scripts": {
     "start": "nx serve",
+    "dev": "nx run-many --target=serve --projects=backend,frontend --parallel=true",
     "build": "nx build",
     "test": "nx test",
     "prepare": "husky install"

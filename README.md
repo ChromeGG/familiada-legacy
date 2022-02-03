@@ -4,10 +4,10 @@ App inspired by Familiada - the Polish version of Family Feud.
 
 ## Running application
 
-Use this code snippet to run whole application
-
 ```bash
-npx nx run-many --target=serve --projects=backend,frontend --parallel=true
+npm install
+npm run prepare
+npm run dev
 ```
 
 ## Adding capabilities to your workspace

@@ -15,7 +15,7 @@ jobs:
           key: cache-node-modules-${{ hashFiles('package-lock.json') }}
       - name: npm install
         if: steps.cache.outputs.cache-hit != 'true'
-        run: npm install --no-save --package-lock-only
+        run: npm ci
 
   distributed-task:
     runs-on: ubuntu-latest

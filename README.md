@@ -1,16 +1,13 @@
-
-
 # Familiada
 
 App inspired by Familiada - the Polish version of Family Feud.
 
-
 ## Running application
 
-Use this code snippet to run whole application
-
 ```bash
-npx nx run-many --target=serve --projects=backend,frontend --parallel=true
+npm install
+npm run prepare
+npm run dev
 ```
 
 ## Adding capabilities to your workspace
@@ -81,4 +78,3 @@ Run `npx nx affected:e2e` to execute the end-to-end tests affected by a change.
 ## Understand your workspace
 
 Run `npx nx dep-graph` to see a diagram of the dependencies of your projects.
-

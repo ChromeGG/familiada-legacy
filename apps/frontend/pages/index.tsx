@@ -23,7 +23,7 @@ import axios, { AxiosResponse } from 'axios'
 import {
   ClientToServerEvents,
   ServerToClientEvents,
-  User,
+  Player,
 } from '@familiada/shared-interfaces'
 import JoinToGame, { FormInput } from '../components/JoinToGame'
 import {
@@ -40,11 +40,63 @@ import {
 
 export function Index() {
   const { t } = useTranslation()
-
   const form = useJoinToGameForm()
+  const [player, setPlayer] = useState<Player>(null)
+  const [socket, setSocket] =
+    useState<Socket<ServerToClientEvents, ClientToServerEvents>>(null)
 
-  const joinToGame = async (formData: JoinToGameFormInput) => {
-    console.log(formData)
+  const joinToGame = async ({
+    gameId,
+    team,
+    playerName,
+  }: JoinToGameFormInput) => {
+    // POTEM OGARNĄĆ TEN SYF NA DOLE
+    // const localUser = { name, team }
+    // setDebug({ gameId, name, team })
+    // setUser(localUser)
+    const newSocket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
+      `http://${window.location.hostname}:3333`
+    )
+    setSocket(newSocket)
+    console.log('socket ID', newSocket.id)
+
+    newSocket.on('userJoined', (sth) => {
+      console.log('userJoined', sth)
+      setPlayer((prevPlayers) => [...prevPlayers, sth])
+    })
+
+    // newSocket.emit('join', localUser)
+    // setUsers((prevPlayers) => [...prevPlayers, { name, team }])
+
+    // newSocket.on('answer', (sth) => {
+    //   console.log('answer', sth)
+    //   // setUsers((prevPlayers) => [...prevPlayers, sth])
+    // })
+  }
+
+  const connect = ({ gameId, name, team }: FormInput) => {
+    // POTEM OGARNĄĆ TEN SYF NA DOLE
+    const localUser = { name, team }
+    // setDebug({ gameId, name, team })
+    // setUser(localUser)
+    const newSocket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
+      `http://${window.location.hostname}:3333`
+    )
+    setSocket(newSocket)
+    console.log('socket ID', newSocket.id)
+
+    // newSocket.on('userJoined', (sth) => {
+    //   console.log('userJoined', sth)
+    //   setUsers((prevPlayers) => [...prevPlayers, sth])
+    // })
+
+    newSocket.emit('join', localUser)
+    // setUsers((prevPlayers) => [...prevPlayers, { name, team }])
+
+    // newSocket.on('answer', (sth) => {
+    //   console.log('answer', sth)
+    //   // setUsers((prevPlayers) => [...prevPlayers, sth])
+    // })
   }
 
   return (
@@ -58,14 +110,14 @@ export function Index() {
             <CardHeader title="Familiada" />
             <CardContent>
               <TextFieldElement
-                name="name"
-                label={t`name`}
+                name="playerName"
+                label={t`player_name`}
                 fullWidth
                 autoComplete="off"
               />
               <TextFieldElement
                 name="gameId"
-                label={t`gameId`}
+                label={t`game_id`}
                 fullWidth
                 autoComplete="off"
               />

@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 import { getJoi, extractDefaults } from './validations'
 
 export interface JoinToGameFormInput {
-  name: string
+  playerName: string
   gameId: string
   team: TEAM
 }
@@ -16,9 +16,13 @@ export const useJoinToGameForm = () => {
   const Joi = getJoi(t)
 
   const schema = Joi.object<JoinToGameFormInput>({
-    name: Joi.string().required().min(3).default('').label(t('field.name')),
+    playerName: Joi.string()
+      .required()
+      .min(3)
+      .default('')
+      .label(t('field.playerName')),
     gameId: Joi.string().required().min(3).default('').label(t('field.gameId')),
-    team: Joi.string().valid('RED', 'BLUE'),
+    team: Joi.string().valid('RED', 'BLUE').required().label(t('field.team')),
   })
 
   const defaultValues = extractDefaults<JoinToGameFormInput>(schema)

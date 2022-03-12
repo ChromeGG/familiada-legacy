@@ -22,15 +22,15 @@ import axios, { AxiosResponse } from 'axios'
 import {
   ClientToServerEvents,
   ServerToClientEvents,
-  User,
+  Player,
 } from '@familiada/shared-interfaces'
 import JoinToGame, { FormInput } from '../components/JoinToGame'
 
 export function Index() {
   const [socket, setSocket] =
     useState<Socket<ServerToClientEvents, ClientToServerEvents>>(null)
-  const [user, setUser] = useState<User>(null)
-  const [users, setUsers] = useState<User[]>([])
+  const [user, setUser] = useState<Player>(null)
+  const [users, setUsers] = useState<Player[]>([])
   const [debug, setDebug] = useState(null)
 
   const connect = ({ gameId, name, team }: FormInput) => {

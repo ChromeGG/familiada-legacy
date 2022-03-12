@@ -1,0 +1,25 @@
+{
+  "any": {
+    "required": "Pole {{#label}} jest wymagane"
+  },
+  "array": {
+    "max": "Kolekcja {{#label}} musi zawierać mniej niż {{#limit}} rzeczy",
+    "min": "Kolekcja {{#label}} musi zawierać przynajmniej {{#limit}} rzecz"
+  },
+  "number": {
+    "base": "Pole {{#label}} musi być liczbą",
+    "integer": "Pole {{#label}} musi być liczbą całkowitą",
+    "max": "Pole {{#label}} musi być mniejsze bądź równe {{#limit}}",
+    "min": "Pole {{#label}} musi być większe bądź równe {{#limit}}"
+  },
+  "string": {
+    "empty": "Pole {{#label}} nie może być puste",
+    "max": "Pole {{#label}} musi zawierać mniej niż {{#limit}} znaków",
+    "min": "Pole {{#label}} musi zawierać przynajmniej {{#limit}} znaków"
+  },
+  "field": {
+    "name": "nazwa",
+    "gameId": "ID Gry",
+    "team": "Drużyna"
+  }
+}

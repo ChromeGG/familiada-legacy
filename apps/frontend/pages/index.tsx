@@ -15,6 +15,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  Grid,
 } from '@mui/material'
 import io, { Socket } from 'socket.io-client'
 import Script from 'next/script'
@@ -25,77 +26,75 @@ import {
   User,
 } from '@familiada/shared-interfaces'
 import JoinToGame, { FormInput } from '../components/JoinToGame'
+import {
+  FormContainer,
+  RadioButtonGroup,
+  TextFieldElement,
+} from 'react-hook-form-mui'
+import useTranslation from 'next-translate/useTranslation'
+import { joiResolver } from '@hookform/resolvers/joi'
+import {
+  JoinToGameFormInput,
+  useJoinToGameForm,
+} from '../validation/joinToGame'
 
 export function Index() {
-  const [socket, setSocket] =
-    useState<Socket<ServerToClientEvents, ClientToServerEvents>>(null)
-  const [user, setUser] = useState<User>(null)
-  const [users, setUsers] = useState<User[]>([])
-  const [debug, setDebug] = useState(null)
+  const { t } = useTranslation()
 
-  const connect = ({ gameId, name, team }: FormInput) => {
-    // ! NEXT: przemyśleć autoryzację i jak mają payloady wyglądać.
-    // POTEM OGARNĄĆ TEN SYF NA DOLE
-    const localUser = { name, team }
-    setDebug({ gameId, name, team })
-    setUser(localUser)
-    const newSocket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
-      `http://${window.location.hostname}:3333`
-    )
-    setSocket(newSocket)
-    console.log('socket ID', newSocket.id)
+  const form = useJoinToGameForm()
 
-    newSocket.on('userJoined', (sth) => {
-      console.log('userJoined', sth)
-      setUsers((prevUsers) => [...prevUsers, sth])
-    })
-
-    newSocket.emit('join', localUser)
-    // setUsers((prevUsers) => [...prevUsers, { name, team }])
-
-    // newSocket.on('answer', (sth) => {
-    //   console.log('answer', sth)
-    //   // setUsers((prevUsers) => [...prevUsers, sth])
-    // })
-  }
-
-  const sendEvent = () => {
-    socket.emit('findAllUsers', { answer: 'abc' })
+  const joinToGame = async (formData: JoinToGameFormInput) => {
+    console.log(formData)
   }
 
   return (
-    <Box
-      sx={{
-        display: 'inline-flex',
-        justifyContent: 'center',
-        flexDirection: 'column',
-      }}
-    >
-      {debug && JSON.stringify(debug, null, 2)}
-      <JoinToGame onJoin={connect} />
+    <Grid container>
+      <Grid item xs={12} md={8} lg={4}>
+        <FormContainer
+          formContext={form}
+          handleSubmit={form.handleSubmit(joinToGame)}
+        >
+          <Card>
+            <CardHeader title="Familiada" />
+            <CardContent>
+              <TextFieldElement
+                name="name"
+                label={t`name`}
+                fullWidth
+                autoComplete="off"
+              />
+              <TextFieldElement
+                name="gameId"
+                label={t`gameId`}
+                fullWidth
+                autoComplete="off"
+              />
+              <RadioButtonGroup
+                label={t`team`}
+                name="team"
+                options={[
+                  {
+                    id: 'RED',
+                    label: t`team_red`,
+                  },
+                  {
+                    id: 'BLUE',
+                    label: t`team_blue`,
+                  },
+                ]}
+              />
+            </CardContent>
 
-      {!!users.length && (
-        <Card sx={{ m: 4, p: 4 }}>
-          <CardHeader title={`List of users of game ?`} />
-          <CardContent>
-            <List>
-              {users.map(({ name }) => {
-                return (
-                  <ListItem key={name}>
-                    <ListItemText>{name}</ListItemText>
-                  </ListItem>
-                )
-              })}
-            </List>
-          </CardContent>
-          <CardActions>
-            <Button variant="contained" onClick={sendEvent}>
-              SEND EVENT
-            </Button>
-          </CardActions>
-        </Card>
-      )}
-    </Box>
+            <CardActions>
+              <Button
+                type="submit"
+                variant="contained"
+              >{t`join_to_game`}</Button>
+            </CardActions>
+          </Card>
+        </FormContainer>
+      </Grid>
+    </Grid>
   )
 }
 

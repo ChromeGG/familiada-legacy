@@ -60,7 +60,7 @@ export function Index() {
   }
 
   const sendEvent = () => {
-    socket.emit('answer', { answer: 'abc' })
+    socket.emit('findAllUsers', { answer: 'abc' })
   }
 
   return (

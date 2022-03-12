@@ -1,14 +1,25 @@
 import { AppProps } from 'next/app'
 import Head from 'next/head'
+import { theme } from '../config/theme'
+import { ThemeProvider } from '@mui/material/styles'
+import { DefaultSeo } from 'next-seo'
 
 function CustomApp({ Component, pageProps }: AppProps) {
   return (
     <>
-      <Head>
-        <title>Welcome to frontend!</title>
-      </Head>
+      <DefaultSeo
+        openGraph={{
+          type: 'website',
+          locale: 'pl',
+          site_name: 'Familiada',
+          title: 'Familiada',
+        }}
+        titleTemplate="%s | Familiada"
+      />
       <main className="app">
-        <Component {...pageProps} />
+        <ThemeProvider theme={theme}>
+          <Component {...pageProps} />
+        </ThemeProvider>
       </main>
     </>
   )

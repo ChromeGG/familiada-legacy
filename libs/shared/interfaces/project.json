@@ -1,20 +1,20 @@
 {
-  "root": "libs/interfaces",
-  "sourceRoot": "libs/interfaces/src",
+  "root": "libs/shared/interfaces",
+  "sourceRoot": "libs/shared/interfaces/src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/interfaces/**/*.ts"]
+        "lintFilePatterns": ["libs/shared/interfaces/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/interfaces"],
+      "outputs": ["coverage/libs/shared/interfaces"],
       "options": {
-        "jestConfig": "libs/interfaces/jest.config.js",
+        "jestConfig": "libs/shared/interfaces/jest.config.js",
         "passWithNoTests": true
       }
     }

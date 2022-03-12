@@ -1,92 +1,101 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { Button, Grid, Typography, Divider, TextField } from '@mui/material'
+import { useState } from 'react'
+import {
+  Button,
+  Typography,
+  TextField,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  Card,
+  Box,
+  CardHeader,
+  CardContent,
+  CardActions,
+  Stack,
+  List,
+  ListItem,
+  ListItemText,
+} from '@mui/material'
 import io, { Socket } from 'socket.io-client'
 import Script from 'next/script'
 import axios, { AxiosResponse } from 'axios'
-import { User } from '@familiada/interfaces'
+import {
+  ClientToServerEvents,
+  ServerToClientEvents,
+  User,
+} from '@familiada/shared-interfaces'
+import JoinToGame, { FormInput } from '../components/JoinToGame'
 
 export function Index() {
-  const [socket, setSocket] = useState<Socket>(null)
-  const [gameId, setGameId] = useState('')
-  const [insertedGameId, setInsertedGameId] = useState('')
-  const [userName, setUserName] = useState('')
-  const [users, setUsers] = useState([])
+  const [socket, setSocket] =
+    useState<Socket<ServerToClientEvents, ClientToServerEvents>>(null)
+  const [user, setUser] = useState<User>(null)
+  const [users, setUsers] = useState<User[]>([])
+  const [debug, setDebug] = useState(null)
 
-  useEffect(() => {
-    const newSocket = io(`http://${window.location.hostname}:3333`)
-    // newSocket.
+  const connect = ({ gameId, name, team }: FormInput) => {
+    // ! NEXT: przemyśleć autoryzację i jak mają payloady wyglądać.
+    // POTEM OGARNĄĆ TEN SYF NA DOLE
+    const localUser = { name, team }
+    setDebug({ gameId, name, team })
+    setUser(localUser)
+    const newSocket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
+      `http://${window.location.hostname}:3333`
+    )
     setSocket(newSocket)
-    console.log('NEW SOCKET')
+    console.log('socket ID', newSocket.id)
 
-    newSocket.on('userJoinedToGame', (sth) => {
-      console.log('on User join', sth)
+    newSocket.on('userJoined', (sth) => {
+      console.log('userJoined', sth)
       setUsers((prevUsers) => [...prevUsers, sth])
     })
-    return () => newSocket.close()
-  }, [setSocket, users])
 
-  const createGame = async () => {
-    const { data } = await axios(`http://localhost:3333/api/games/create`)
-    setGameId(data.id)
-    // socket.emit('message', {a:1})
-    // socket
-  }
+    newSocket.emit('join', localUser)
+    // setUsers((prevUsers) => [...prevUsers, { name, team }])
 
-  const joinToGame = async () => {
-    // const use
-    const { data } = await axios.post<User, AxiosResponse<User>, User>(
-      `http://localhost:3333/api/games/join`,
-      {
-        name: userName,
-      }
-    )
-    console.log(data)
-    // setGameId(data.id)
+    // newSocket.on('answer', (sth) => {
+    //   console.log('answer', sth)
+    //   // setUsers((prevUsers) => [...prevUsers, sth])
+    // })
   }
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInsertedGameId(event.target.value)
+  const sendEvent = () => {
+    socket.emit('answer', { answer: 'abc' })
   }
-  const handleUserNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUserName(event.target.value)
-  }
-
-  const myObject = {
-    a: 1,
-  }
-  console.log()
 
   return (
-    <div>
-      <Typography variant="h4">Familiada</Typography>
-      <Button onClick={createGame} variant="contained">
-        Stwórz lobby
-      </Button>
-      <div>GameId: {gameId}</div>
-      {gameId && (
-        <>
-          <TextField
-            value={insertedGameId}
-            label="Game ID"
-            onChange={handleChange}
-          />
-          <TextField
-            value={userName}
-            label="user name"
-            onChange={handleUserNameChange}
-          />
-          <Button variant="contained" onClick={() => joinToGame()}>
-            JOIN
-          </Button>
-        </>
+    <Box
+      sx={{
+        display: 'inline-flex',
+        justifyContent: 'center',
+        flexDirection: 'column',
+      }}
+    >
+      {debug && JSON.stringify(debug, null, 2)}
+      <JoinToGame onJoin={connect} />
+
+      {!!users.length && (
+        <Card sx={{ m: 4, p: 4 }}>
+          <CardHeader title={`List of users of game ?`} />
+          <CardContent>
+            <List>
+              {users.map(({ name }) => {
+                return (
+                  <ListItem key={name}>
+                    <ListItemText>{name}</ListItemText>
+                  </ListItem>
+                )
+              })}
+            </List>
+          </CardContent>
+          <CardActions>
+            <Button variant="contained" onClick={sendEvent}>
+              SEND EVENT
+            </Button>
+          </CardActions>
+        </Card>
       )}
-      <Typography>List of users in Game:</Typography>
-      <ul>
-        {users.map((name) => {
-          return <li key={name}>{name}</li>
-        })}
-      </ul>
-    </div>
+    </Box>
   )
 }
 

@@ -1,32 +1,55 @@
 import { GamesService } from './games.service'
 import {
+  ConnectedSocket,
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets'
 import { Server, Socket } from 'socket.io'
+import {
+  ClientToServerEvents,
+  ServerToClientEvents,
+  User,
+} from '@familiada/shared-interfaces'
 
 @WebSocketGateway({ cors: '*' })
 export class GamesGateway {
   constructor(private readonly gamesService: GamesService) {}
   @WebSocketServer()
-  server: Server
+  server: Server<ClientToServerEvents, ServerToClientEvents>
 
-  @SubscribeMessage('message')
+  @SubscribeMessage('answer')
   handleMessage(@MessageBody() message: string): void {
-    console.log('~ message', message)
-    this.server.emit('message', message)
+    console.log('~ answer', message)
+    // this.server.to().emit('message', message)
   }
 
-  @SubscribeMessage('identity')
-  async identity(@MessageBody() data: number): Promise<number> {
-    console.log(data)
-    return data
+  @SubscribeMessage('answerHit')
+  async answerHit(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() user: User
+  ) {
+    this.server.emit('lockAnswering')
+    //
+    // To ustawia w round[0].firstAnswerHit: Adam
+    this.gamesService.registerUserHit()
+    // console.log('~ socket', client.rooms)
+    // console.log('~ socket', this.server.in('123').allSockets)
+    // console.log('~ user', user)
+    this.server.emit('userJoined', user)
   }
 
-  async handleConnection(client: Socket, ...args: any[]) {
-    // console.log(await this.server.fetchSockets())
-    console.log(`Client connected: ${client.id}`)
+  @SubscribeMessage('join')
+  async join(@ConnectedSocket() client: Socket, @MessageBody() user: User) {
+    console.log('~ socket', client.rooms)
+    console.log('~ socket', this.server.in('123').allSockets)
+    // console.log('~ user', user)
+    this.server.emit('userJoined', user)
+  }
+
+  // TODO add validation, maybe https://github.com/elisvathi/joi-typescript-validator?
+  async handleConnection(client: Socket, user: User) {
+    // client.join()
   }
 }

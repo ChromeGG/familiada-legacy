@@ -4,6 +4,6 @@
     "backend": "apps/backend",
     "frontend": "apps/frontend",
     "frontend-e2e": "apps/frontend-e2e",
-    "interfaces": "libs/interfaces"
+    "shared-interfaces": "libs/shared/interfaces"
   }
 }

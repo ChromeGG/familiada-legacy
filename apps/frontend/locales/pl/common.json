@@ -1,4 +1,6 @@
 {
+  "answer": "Odpowiedź",
+  "answer_to_question": "Odpowiedz",
   "cancel": "anuluj",
   "choose": "Wybierz",
   "confirm": "potwierdź",
@@ -12,6 +14,5 @@
   "team": "Drużyna",
   "team_blue": "Drużyna Niebieska",
   "team_red": "Drużyna Czerwona",
-  "yes": "tak",
-  "answer_to_question": "Odpowiedz"
+  "yes": "tak"
 }

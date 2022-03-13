@@ -17,10 +17,9 @@ const Question = () => {
   const text = 'Więcej niż jedno zwierze to ...'
   const textChunks = text.split('')
 
-  const showQuestion = false
   const [displayed, setDisplayed] = useState('')
 
-  const [time, setTime] = useState(Date.now())
+  // Lift it up for setting from parent without rerendering?
   const [pushLetters, setPushLetters] = useState(true)
 
   function* generateText() {
@@ -39,9 +38,8 @@ const Question = () => {
           setPushLetters(() => true)
           return
         }
-        console.log('~ res', res)
         setDisplayed((prev) => prev + res.value)
-      }, 200)
+      }, 150)
 
       return () => {
         clearInterval(interval)

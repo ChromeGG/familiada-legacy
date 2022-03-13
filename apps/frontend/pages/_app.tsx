@@ -4,7 +4,7 @@ import { theme } from '../config/theme'
 import { ThemeProvider } from '@mui/material/styles'
 import { DefaultSeo } from 'next-seo'
 import { CssBaseline } from '@mui/material'
-
+import { PlayerContext } from '../contexts/Player'
 function CustomApp({ Component, pageProps }: AppProps) {
   return (
     <>
@@ -19,10 +19,11 @@ function CustomApp({ Component, pageProps }: AppProps) {
         defaultTitle="Familiada"
       />
       <CssBaseline />
-
-      <ThemeProvider theme={theme}>
-        <Component {...pageProps} />
-      </ThemeProvider>
+      <PlayerContext.Provider value={null}>
+        <ThemeProvider theme={theme}>
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </PlayerContext.Provider>
     </>
   )
 }

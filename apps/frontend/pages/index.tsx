@@ -1,25 +1,13 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import {
   Button,
-  Typography,
-  TextField,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
   Card,
-  Box,
   CardHeader,
   CardContent,
   CardActions,
-  Stack,
-  List,
-  ListItem,
-  ListItemText,
   Grid,
 } from '@mui/material'
 import io, { Socket } from 'socket.io-client'
-import Script from 'next/script'
-import axios, { AxiosResponse } from 'axios'
 import {
   ClientToServerEvents,
   ServerToClientEvents,
@@ -32,18 +20,16 @@ import {
   TextFieldElement,
 } from 'react-hook-form-mui'
 import useTranslation from 'next-translate/useTranslation'
-import { joiResolver } from '@hookform/resolvers/joi'
 import {
   JoinToGameFormInput,
   useJoinToGameForm,
 } from '../validation/joinToGame'
-import PlayersList from '../components/PlayersList'
-import { Team } from '../interfaces'
+import { PlayerContext } from '../contexts/Player'
 
 export function Index() {
   const { t } = useTranslation()
   const form = useJoinToGameForm()
-  const [player, setPlayer] = useState<Player>(null)
+  const player = '123;' //useContext<Player>(PlayerContext)
   const [socket, setSocket] =
     useState<Socket<ServerToClientEvents, ClientToServerEvents>>(null)
 
@@ -52,10 +38,6 @@ export function Index() {
     team,
     playerName,
   }: JoinToGameFormInput) => {
-    // POTEM OGARNĄĆ TEN SYF NA DOLE
-    // const localUser = { name, team }
-    // setDebug({ gameId, name, team })
-    // setUser(localUser)
     const newSocket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
       `http://${window.location.hostname}:3333`
     )
@@ -64,7 +46,7 @@ export function Index() {
 
     newSocket.on('userJoined', (sth) => {
       console.log('userJoined', sth)
-      setPlayer((prevPlayers) => [...prevPlayers, sth])
+      // setPlayer((prevPlayers) => [...prevPlayers, sth])
     })
 
     // newSocket.emit('join', localUser)
@@ -109,6 +91,7 @@ export function Index() {
           handleSubmit={form.handleSubmit(joinToGame)}
         >
           <Card>
+            {player}
             <CardHeader title="Familiada" />
             <CardContent>
               <TextFieldElement

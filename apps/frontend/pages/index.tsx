@@ -24,12 +24,12 @@ import {
   JoinToGameFormInput,
   useJoinToGameForm,
 } from '../validation/joinToGame'
-import { PlayerContext } from '../contexts/Player'
+import { usePlayerContext } from '../contexts/Player'
 
 export function Index() {
   const { t } = useTranslation()
   const form = useJoinToGameForm()
-  const player = '123;' //useContext<Player>(PlayerContext)
+  const { player, setPlayer } = usePlayerContext()
   const [socket, setSocket] =
     useState<Socket<ServerToClientEvents, ClientToServerEvents>>(null)
 
@@ -43,7 +43,7 @@ export function Index() {
     )
     setSocket(newSocket)
     console.log('socket ID', newSocket.id)
-
+    setPlayer({ id: newSocket.id, name: playerName, team })
     newSocket.on('userJoined', (sth) => {
       console.log('userJoined', sth)
       // setPlayer((prevPlayers) => [...prevPlayers, sth])
@@ -82,6 +82,7 @@ export function Index() {
     //   // setUsers((prevPlayers) => [...prevPlayers, sth])
     // })
   }
+  console.log(123)
 
   return (
     <Grid container>
@@ -91,7 +92,6 @@ export function Index() {
           handleSubmit={form.handleSubmit(joinToGame)}
         >
           <Card>
-            {player}
             <CardHeader title="Familiada" />
             <CardContent>
               <TextFieldElement
@@ -128,6 +128,13 @@ export function Index() {
                 type="submit"
                 variant="contained"
               >{t`join_to_game`}</Button>
+              <Button
+                onClick={() =>
+                  setPlayer({ id: '1', name: 'asd', team: 'BLUE' })
+                }
+              >
+                XXXX
+              </Button>
             </CardActions>
           </Card>
         </FormContainer>

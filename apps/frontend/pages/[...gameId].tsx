@@ -55,7 +55,7 @@ export function Index() {
           </Button>
         )}
       </Grid>
-      <Grid container item xs={12} p={2} spacing={2}>
+      <Grid item container xs={12} p={2} spacing={2}>
         <Grid item xs={6}>
           <PlayersList team={teamRed} />
         </Grid>

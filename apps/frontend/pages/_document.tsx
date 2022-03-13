@@ -7,13 +7,8 @@ import React from 'react'
 class MyDocument extends Document {
   render() {
     return (
-      <Html lang="pl-Pl">
+      <Html lang="pl">
         <Head>
-          <link
-            href="https://fonts.googleapis.com/css2?family=Lobster&display=swap"
-            rel="stylesheet"
-          />
-
           <link
             href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&family=Press+Start+2P&display=swap"
             rel="stylesheet"

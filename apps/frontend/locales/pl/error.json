@@ -21,6 +21,7 @@
     "name": "nazwa",
     "gameId": "ID Gry",
     "team": "Drużyna",
-    "playerName": "Nazwa gracza"
+    "playerName": "Nazwa gracza",
+    "answer": "Odpowiedź"
   }
 }

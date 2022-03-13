@@ -16,21 +16,19 @@ const Board = () => {
   const { t } = useTranslation()
 
   const answers = [
-    { position: 1, text: 'Owca', score: 45 },
+    { position: 1, text: 'Lama', score: 45 },
     { position: 2, text: '.......', score: 9 },
   ]
 
   return (
     <Paper
       sx={{
-        m: 1,
-        p: 1,
         bgcolor: 'black',
         borderRadius: 4,
         color: 'greenyellow',
       }}
     >
-      <Grid container>
+      <Grid container xs="auto">
         <Grid item xs={12} textAlign="center">
           <Typography fontFamily={`"Press Start 2P"`}>123</Typography>
         </Grid>

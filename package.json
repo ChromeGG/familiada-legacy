@@ -46,7 +46,8 @@
     "rxjs": "7.5.5",
     "socket.io": "4.4.1",
     "socket.io-client": "4.4.1",
-    "tslib": "2.0.0"
+    "tslib": "2.0.0",
+    "@react-hookz/web": "13.0.0"
   },
   "devDependencies": {
     "@emotion/babel-plugin": "11.3.0",

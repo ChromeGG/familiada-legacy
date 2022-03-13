@@ -36,12 +36,12 @@
 // Payload: string z odpowiedzią
 // serwer sprawdza, czy odpowiedź pasuje
 
-export type TEAM = 'RED' | 'BLUE'
+export type TeamColor = 'RED' | 'BLUE'
 
 export interface Player {
   id: string
   name: string
-  team: TEAM
+  team: TeamColor
 }
 
 export interface Answer {

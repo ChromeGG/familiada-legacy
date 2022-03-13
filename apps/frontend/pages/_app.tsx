@@ -3,6 +3,7 @@ import Head from 'next/head'
 import { theme } from '../config/theme'
 import { ThemeProvider } from '@mui/material/styles'
 import { DefaultSeo } from 'next-seo'
+import { CssBaseline } from '@mui/material'
 
 function CustomApp({ Component, pageProps }: AppProps) {
   return (
@@ -15,12 +16,13 @@ function CustomApp({ Component, pageProps }: AppProps) {
           title: 'Familiada',
         }}
         titleTemplate="%s | Familiada"
+        defaultTitle="Familiada"
       />
-      <main className="app">
-        <ThemeProvider theme={theme}>
-          <Component {...pageProps} />
-        </ThemeProvider>
-      </main>
+      <CssBaseline />
+
+      <ThemeProvider theme={theme}>
+        <Component {...pageProps} />
+      </ThemeProvider>
     </>
   )
 }

@@ -1,4 +1,4 @@
-import { Player } from '@familiada/shared-interfaces'
+import { Player, TeamColor } from '@familiada/shared-interfaces'
 
 export interface AvailableActions {
   hitAnswer: string[]
@@ -6,7 +6,8 @@ export interface AvailableActions {
 }
 
 export interface Team {
-  players: Player[]
+  players: Omit<Player, 'team'>[]
+  color: TeamColor
   score: number
 }
 

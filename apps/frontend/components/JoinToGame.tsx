@@ -14,7 +14,7 @@ import {
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { joiResolver } from '@hookform/resolvers/joi'
 import Joi from 'joi'
-import { TEAM } from '@familiada/shared-interfaces'
+import { TeamColor } from '@familiada/shared-interfaces'
 import { FormContainer, TextFieldElement } from 'react-hook-form-mui'
 import { useEffect } from 'react'
 
@@ -25,7 +25,7 @@ interface Props {
 export interface FormInput {
   gameId: string
   name: string
-  team: TEAM
+  team: TeamColor
 }
 
 const schema = Joi.object({

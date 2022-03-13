@@ -1,4 +1,4 @@
-import { TEAM } from '@familiada/shared-interfaces'
+import { TeamColor } from '@familiada/shared-interfaces'
 import { joiResolver } from '@hookform/resolvers/joi'
 import useTranslation from 'next-translate/useTranslation'
 import { useForm } from 'react-hook-form'
@@ -8,7 +8,7 @@ import { getJoi, extractDefaults } from './validations'
 export interface JoinToGameFormInput {
   playerName: string
   gameId: string
-  team: TEAM
+  team: TeamColor
 }
 
 export const useJoinToGameForm = () => {

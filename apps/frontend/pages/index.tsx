@@ -37,6 +37,8 @@ import {
   JoinToGameFormInput,
   useJoinToGameForm,
 } from '../validation/joinToGame'
+import PlayersList from '../components/PlayersList'
+import { Team } from '../interfaces'
 
 export function Index() {
   const { t } = useTranslation()
@@ -101,7 +103,7 @@ export function Index() {
 
   return (
     <Grid container>
-      <Grid item xs={12} md={8} lg={4}>
+      <Grid item xs={12} m={2}>
         <FormContainer
           formContext={form}
           handleSubmit={form.handleSubmit(joinToGame)}
@@ -120,6 +122,7 @@ export function Index() {
                 label={t`game_id`}
                 fullWidth
                 autoComplete="off"
+                sx={{ my: 3 }}
               />
               <RadioButtonGroup
                 label={t`team`}

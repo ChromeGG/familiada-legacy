@@ -8,6 +8,7 @@ export class GamesService {
   constructor(@InjectRedis() private readonly defaultRedisClient: Redis) {}
 
   getData(): { message: string } {
+    // TODO tutaj read game ID musi sie wykonać
     return { message: 'Welcome to backend!' }
   }
 

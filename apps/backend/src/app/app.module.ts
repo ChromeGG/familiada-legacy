@@ -4,7 +4,7 @@ import { GamesModule } from './games/games.module'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { RedisModule } from '@liaoliaots/nestjs-redis'
-import { UserModule } from './user/user.module'
+import { PlayerModule } from './player/player.module'
 
 @Module({
   imports: [
@@ -13,7 +13,7 @@ import { UserModule } from './user/user.module'
       config: { host: '127.0.0.1', port: 6379, password: 'MyRedisPass' },
     }),
     GamesModule,
-    UserModule,
+    PlayerModule,
   ],
   controllers: [AppController],
   providers: [AppService],

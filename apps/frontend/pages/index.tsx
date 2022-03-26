@@ -6,6 +6,7 @@ import {
   CardContent,
   CardActions,
   Grid,
+  Container,
 } from '@mui/material'
 import io, { Socket } from 'socket.io-client'
 import {
@@ -33,15 +34,13 @@ export function Index() {
   const [socket, setSocket] =
     useState<Socket<ServerToClientEvents, ClientToServerEvents>>(null)
 
-  const joinToGame = async ({
-    gameId,
-    team,
-    playerName,
-  }: JoinToGameFormInput) => {
+  const joinToGame = ({ gameId, team, playerName }: JoinToGameFormInput) => {
     const newSocket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
       `http://${window.location.hostname}:3333`
     )
     setSocket(newSocket)
+    // ! NEXT there is newSocket.id, but its undefined at start ..?
+    console.log('~ newSocket', newSocket)
     console.log('socket ID', newSocket.id)
     setPlayer({ id: newSocket.id, name: playerName, team })
     newSocket.on('userJoined', (sth) => {
@@ -58,88 +57,51 @@ export function Index() {
     // })
   }
 
-  const connect = ({ gameId, name, team }: FormInput) => {
-    // POTEM OGARNĄĆ TEN SYF NA DOLE
-    const localUser = { name, team }
-    // setDebug({ gameId, name, team })
-    // setUser(localUser)
-    const newSocket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
-      `http://${window.location.hostname}:3333`
-    )
-    setSocket(newSocket)
-    console.log('socket ID', newSocket.id)
-
-    // newSocket.on('userJoined', (sth) => {
-    //   console.log('userJoined', sth)
-    //   setUsers((prevPlayers) => [...prevPlayers, sth])
-    // })
-
-    newSocket.emit('join', localUser)
-    // setUsers((prevPlayers) => [...prevPlayers, { name, team }])
-
-    // newSocket.on('answer', (sth) => {
-    //   console.log('answer', sth)
-    //   // setUsers((prevPlayers) => [...prevPlayers, sth])
-    // })
-  }
-  console.log(123)
-
   return (
-    <Grid container>
-      <Grid item xs={12} m={2}>
-        <FormContainer
-          formContext={form}
-          handleSubmit={form.handleSubmit(joinToGame)}
-        >
-          <Card>
-            <CardHeader title="Familiada" />
-            <CardContent>
-              <TextFieldElement
-                name="playerName"
-                label={t`player_name`}
-                fullWidth
-                autoComplete="off"
-              />
-              <TextFieldElement
-                name="gameId"
-                label={t`game_id`}
-                fullWidth
-                autoComplete="off"
-                sx={{ my: 3 }}
-              />
-              <RadioButtonGroup
-                label={t`team`}
-                name="team"
-                options={[
-                  {
-                    id: 'RED',
-                    label: t`team_red`,
-                  },
-                  {
-                    id: 'BLUE',
-                    label: t`team_blue`,
-                  },
-                ]}
-              />
-            </CardContent>
+    <Container maxWidth="sm">
+      <FormContainer
+        formContext={form}
+        handleSubmit={form.handleSubmit(joinToGame)}
+      >
+        <Card>
+          <CardHeader title="Familiada" />
+          <CardContent>
+            <TextFieldElement
+              name="playerName"
+              label={t`player_name`}
+              fullWidth
+              autoComplete="off"
+            />
+            <TextFieldElement
+              name="gameId"
+              label={t`game_id`}
+              fullWidth
+              autoComplete="off"
+              sx={{ my: 3 }}
+            />
+            <RadioButtonGroup
+              label={t`team`}
+              name="team"
+              options={[
+                {
+                  id: 'RED',
+                  label: t`team_red`,
+                },
+                {
+                  id: 'BLUE',
+                  label: t`team_blue`,
+                },
+              ]}
+            />
+          </CardContent>
 
-            <CardActions>
-              <Button
-                type="submit"
-                variant="contained"
-              >{t`join_to_game`}</Button>
-              <Button
-                onClick={() =>
-                  setPlayer({ id: '1', name: 'asd', team: 'BLUE' })
-                }
-              >
-                XXXX
-              </Button>
-            </CardActions>
-          </Card>
-        </FormContainer>
-      </Grid>
-    </Grid>
+          <CardActions>
+            <Button type="submit" variant="contained">{t`join_to_game`}</Button>
+            <Button onClick={() => console.log(player)}>XXXX</Button>
+          </CardActions>
+        </Card>
+      </FormContainer>
+    </Container>
   )
 }
 

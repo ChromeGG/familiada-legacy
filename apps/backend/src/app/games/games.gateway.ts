@@ -10,7 +10,7 @@ import { Server, Socket } from 'socket.io'
 import {
   ClientToServerEvents,
   ServerToClientEvents,
-  User,
+  Player,
 } from '@familiada/shared-interfaces'
 
 @WebSocketGateway({ cors: '*' })
@@ -28,9 +28,9 @@ export class GamesGateway {
   @SubscribeMessage('answerHit')
   async answerHit(
     @ConnectedSocket() client: Socket,
-    @MessageBody() user: User
+    @MessageBody() user: Player
   ) {
-    this.server.emit('lockAnswering')
+    // this.server.emit('lockAnswering')
     //
     // To ustawia w round[0].firstAnswerHit: Adam
     this.gamesService.registerUserHit()
@@ -41,7 +41,7 @@ export class GamesGateway {
   }
 
   @SubscribeMessage('join')
-  async join(@ConnectedSocket() client: Socket, @MessageBody() user: User) {
+  async join(@ConnectedSocket() client: Socket, @MessageBody() user: Player) {
     console.log('~ socket', client.rooms)
     console.log('~ socket', this.server.in('123').allSockets)
     // console.log('~ user', user)
@@ -49,7 +49,9 @@ export class GamesGateway {
   }
 
   // TODO add validation, maybe https://github.com/elisvathi/joi-typescript-validator?
-  async handleConnection(client: Socket, user: User) {
+  async handleConnection(client: Socket, user: Player) {
+    console.log(client.id)
+    return client
     // client.join()
   }
 }

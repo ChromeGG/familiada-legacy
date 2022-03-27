@@ -1,101 +1,107 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import {
   Button,
-  Typography,
-  TextField,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
   Card,
-  Box,
   CardHeader,
   CardContent,
   CardActions,
-  Stack,
-  List,
-  ListItem,
-  ListItemText,
+  Grid,
+  Container,
 } from '@mui/material'
 import io, { Socket } from 'socket.io-client'
-import Script from 'next/script'
-import axios, { AxiosResponse } from 'axios'
 import {
   ClientToServerEvents,
   ServerToClientEvents,
-  User,
+  Player,
 } from '@familiada/shared-interfaces'
 import JoinToGame, { FormInput } from '../components/JoinToGame'
+import {
+  FormContainer,
+  RadioButtonGroup,
+  TextFieldElement,
+} from 'react-hook-form-mui'
+import useTranslation from 'next-translate/useTranslation'
+import {
+  JoinToGameFormInput,
+  useJoinToGameForm,
+} from '../validation/joinToGame'
+import { usePlayerContext } from '../contexts/Player'
 
 export function Index() {
+  const { t } = useTranslation()
+  const form = useJoinToGameForm()
+  const { player, setPlayer } = usePlayerContext()
   const [socket, setSocket] =
     useState<Socket<ServerToClientEvents, ClientToServerEvents>>(null)
-  const [user, setUser] = useState<User>(null)
-  const [users, setUsers] = useState<User[]>([])
-  const [debug, setDebug] = useState(null)
 
-  const connect = ({ gameId, name, team }: FormInput) => {
-    // ! NEXT: przemyśleć autoryzację i jak mają payloady wyglądać.
-    // POTEM OGARNĄĆ TEN SYF NA DOLE
-    const localUser = { name, team }
-    setDebug({ gameId, name, team })
-    setUser(localUser)
+  const joinToGame = ({ gameId, team, playerName }: JoinToGameFormInput) => {
     const newSocket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
       `http://${window.location.hostname}:3333`
     )
     setSocket(newSocket)
+    // ! NEXT there is newSocket.id, but its undefined at start ..?
+    console.log('~ newSocket', newSocket)
     console.log('socket ID', newSocket.id)
-
+    setPlayer({ id: newSocket.id, name: playerName, team })
     newSocket.on('userJoined', (sth) => {
       console.log('userJoined', sth)
-      setUsers((prevUsers) => [...prevUsers, sth])
+      // setPlayer((prevPlayers) => [...prevPlayers, sth])
     })
 
-    newSocket.emit('join', localUser)
-    // setUsers((prevUsers) => [...prevUsers, { name, team }])
+    // newSocket.emit('join', localUser)
+    // setUsers((prevPlayers) => [...prevPlayers, { name, team }])
 
     // newSocket.on('answer', (sth) => {
     //   console.log('answer', sth)
-    //   // setUsers((prevUsers) => [...prevUsers, sth])
+    //   // setUsers((prevPlayers) => [...prevPlayers, sth])
     // })
   }
 
-  const sendEvent = () => {
-    socket.emit('answer', { answer: 'abc' })
-  }
-
   return (
-    <Box
-      sx={{
-        display: 'inline-flex',
-        justifyContent: 'center',
-        flexDirection: 'column',
-      }}
-    >
-      {debug && JSON.stringify(debug, null, 2)}
-      <JoinToGame onJoin={connect} />
-
-      {!!users.length && (
-        <Card sx={{ m: 4, p: 4 }}>
-          <CardHeader title={`List of users of game ?`} />
+    <Container maxWidth="sm">
+      <FormContainer
+        formContext={form}
+        handleSubmit={form.handleSubmit(joinToGame)}
+      >
+        <Card>
+          <CardHeader title="Familiada" />
           <CardContent>
-            <List>
-              {users.map(({ name }) => {
-                return (
-                  <ListItem key={name}>
-                    <ListItemText>{name}</ListItemText>
-                  </ListItem>
-                )
-              })}
-            </List>
+            <TextFieldElement
+              name="playerName"
+              label={t`player_name`}
+              fullWidth
+              autoComplete="off"
+            />
+            <TextFieldElement
+              name="gameId"
+              label={t`game_id`}
+              fullWidth
+              autoComplete="off"
+              sx={{ my: 3 }}
+            />
+            <RadioButtonGroup
+              label={t`team`}
+              name="team"
+              options={[
+                {
+                  id: 'RED',
+                  label: t`team_red`,
+                },
+                {
+                  id: 'BLUE',
+                  label: t`team_blue`,
+                },
+              ]}
+            />
           </CardContent>
+
           <CardActions>
-            <Button variant="contained" onClick={sendEvent}>
-              SEND EVENT
-            </Button>
+            <Button type="submit" variant="contained">{t`join_to_game`}</Button>
+            <Button onClick={() => console.log(player)}>XXXX</Button>
           </CardActions>
         </Card>
-      )}
-    </Box>
+      </FormContainer>
+    </Container>
   )
 }
 

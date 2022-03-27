@@ -1,5 +1,3 @@
-export type TEAM = 'RED' | 'BLUE'
-
 // TODO
 // 1. Middleware do rozpoznawania userów?
 // 2. Użytkownicy trzymani jako referencje (id) w firstHitach, odpowiedziach... ? - TAK
@@ -11,7 +9,7 @@ export type TEAM = 'RED' | 'BLUE'
 // Ustawia admina gry na userId
 
 // teraz gracze dołączają:
-// Payload: gameId, socketId, userName, userTeam
+// Payload: gameId, socketId, playerName, userTeam
 // Serwer znajduje gre o podanym Id i przypisuje jej usera
 // const users = games.find(gameId).users
 // socket.join(gameId)
@@ -38,23 +36,24 @@ export type TEAM = 'RED' | 'BLUE'
 // Payload: string z odpowiedzią
 // serwer sprawdza, czy odpowiedź pasuje
 
-// TODO rename User to Player
-export interface User {
-  // TODO rename name to id
+export type TeamColor = 'RED' | 'BLUE'
+
+export interface Player {
+  id: string
   name: string
-  team: TEAM
+  team: TeamColor
 }
 
 export interface Answer {
   position: 1 | 2 | 3 | 4 | 5
   score: number
   text: string
-  user: User
+  user: Player
 }
 
 export interface HitAnswer {
   time: Date
-  user: User
+  user: Player
 }
 
 export interface Round {
@@ -66,7 +65,7 @@ export interface Round {
 export interface Game {
   id: string
   adminId: string
-  users: [User]
+  users: [Player]
   actualRound: 1 | 2 | 3 | 4 | 5
   rounds: [Round]
 }
@@ -74,12 +73,12 @@ export interface Game {
 // ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData
 
 export type ClientToServerEvents = {
-  join: (user: User) => void
-  answer: (user: User) => void
+  join: (user: Player) => void
+  answer: (user: Player) => void
 }
-export type ServerToClientEvents = { userJoined: (user: User) => void }
+export type ServerToClientEvents = { userJoined: (user: Player) => void }
 
 export interface SocketData {
   gameId: string
-  user: User
+  user: Player
 }

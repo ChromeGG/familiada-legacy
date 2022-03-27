@@ -3,8 +3,14 @@ import Head from 'next/head'
 import { theme } from '../config/theme'
 import { ThemeProvider } from '@mui/material/styles'
 import { DefaultSeo } from 'next-seo'
+import { CssBaseline } from '@mui/material'
+import { PlayerContext } from '../contexts/Player'
+import { useState } from 'react'
+import { Player } from '@familiada/shared-interfaces'
 
 function CustomApp({ Component, pageProps }: AppProps) {
+  const [player, setPlayer] = useState<Player>(null)
+
   return (
     <>
       <DefaultSeo
@@ -15,12 +21,14 @@ function CustomApp({ Component, pageProps }: AppProps) {
           title: 'Familiada',
         }}
         titleTemplate="%s | Familiada"
+        defaultTitle="Familiada"
       />
-      <main className="app">
+      <CssBaseline />
+      <PlayerContext.Provider value={{ player, setPlayer }}>
         <ThemeProvider theme={theme}>
           <Component {...pageProps} />
         </ThemeProvider>
-      </main>
+      </PlayerContext.Provider>
     </>
   )
 }

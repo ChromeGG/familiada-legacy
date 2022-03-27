@@ -7,6 +7,7 @@ export class AppController {
 
   @Get()
   healthCheck() {
+    // todo - check if redis is up
     return { status: 'Alive' }
   }
 }

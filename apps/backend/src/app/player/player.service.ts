@@ -1,9 +1,13 @@
-import { Injectable } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
+import { Client } from 'redis-om'
 import { CreatePlayerDto } from './dto/create-player.dto'
 import { UpdatePlayerDto } from './dto/update-player.dto'
 
 @Injectable()
 export class PlayerService {
+  // constructor(private readonly playerRepository: PlayerRepository) {}
+  constructor(@Inject('STORAGE_CONNECTION') private db: Client) {}
+
   create(createPlayerDto: CreatePlayerDto) {
     return 'This action adds a new player'
   }
@@ -12,7 +16,8 @@ export class PlayerService {
     return `This action returns all player`
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
+    // await this.db.fetchRepository
     return `This action returns a #${id} player`
   }
 

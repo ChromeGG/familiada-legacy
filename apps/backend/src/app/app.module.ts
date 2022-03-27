@@ -8,10 +8,10 @@ import { PlayerModule } from './player/player.module'
 
 @Module({
   imports: [
-    RedisModule.forRoot({
-      closeClient: true,
-      config: { host: '127.0.0.1', port: 6379, password: 'MyRedisPass' },
-    }),
+    // RedisModule.forRoot({
+    //   closeClient: true,
+    //   config: { host: '127.0.0.1', port: 6379, password: 'MyRedisPass' },
+    // }),
     GamesModule,
     PlayerModule,
   ],

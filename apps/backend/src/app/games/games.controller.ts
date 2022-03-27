@@ -1,4 +1,5 @@
-import { Controller, Get, Param } from '@nestjs/common'
+import { Player } from '@familiada/shared-interfaces'
+import { Controller, Get, Param, Post } from '@nestjs/common'
 
 import { GamesService } from './games.service'
 
@@ -6,13 +7,13 @@ import { GamesService } from './games.service'
 export class GamesController {
   constructor(private readonly gamesService: GamesService) {}
 
-  @Get(':id')
-  getData(@Param('id') id: string) {
-    console.log('~ id', id)
-    return this.gamesService.getData({ id })
+  @Post(':id')
+  joinToGame(@Param('id') gameId: string, player: Player) {
+    return 0
+    // return this.gamesService.joinToGame({ id: gameId })
   }
 
-  @Get('/create')
+  @Post('/create')
   createGame() {
     return this.gamesService.createGame()
   }

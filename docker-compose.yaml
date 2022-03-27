@@ -3,10 +3,9 @@ version: '3.9'
 services:
   redis:
     container_name: 'redis'
-    image: redislabs/rejson:latest
+    image: redislabs/redismod:preview
     ports:
       - 6379:6379
-    command: redis-server --save 60 1 --loglevel warning
 
   redis-commander:
     image: rediscommander/redis-commander:latest

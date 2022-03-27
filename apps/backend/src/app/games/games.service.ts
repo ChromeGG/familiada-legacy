@@ -1,31 +1,24 @@
 import { InjectRedis } from '@liaoliaots/nestjs-redis'
 import { Inject, Injectable } from '@nestjs/common'
 import { randomBytes } from 'crypto'
-import { Redis } from 'ioredis'
-import { Client, Entity, Schema } from 'redis-om'
+import { GamesRepository } from './game.repository'
 
 @Injectable()
-class Player extends Entity {}
 export class GamesService {
-  // constructor(@InjectRedis() private readonly defaultRedisClient: Redis) {}
-  constructor(@Inject('STORAGE_CONNECTION') private client: Client) {}
+  constructor(
+    @Inject(GamesRepository) private gamesRepository: GamesRepository
+  ) {}
 
-  async getData(): Promise<{ message: string }> {
+  async getData({ id }: { id: string }): Promise<{ id: string }> {
     // TODO tutaj read game ID musi sie wykonać
-    // this.db.
-    const schema = new Schema(Player, {
-      id: { type: 'string' },
-      name: { type: 'string' },
-      teamId: { type: 'number' },
-    })
-
-    const playerRepo = this.client.fetchRepository(schema)
-    await playerRepo.createAndSave({
-      id: '1',
+    console.log('~ id', id)
+    const game = await this.gamesRepository.createAndSave({
+      id,
       name: 'test',
-      teamId: 1,
+      actualRound: 1,
     })
-    return { message: 'Welcome to backend!' }
+    console.log('~ game', game)
+    return { id: 'Welcome to backend!' }
   }
 
   async createGame() {

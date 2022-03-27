@@ -9,7 +9,7 @@ export class GamesController {
   @Get(':id')
   getData(@Param('id') id: string) {
     console.log('~ id', id)
-    return this.gamesService.getData()
+    return this.gamesService.getData({ id })
   }
 
   @Get('/create')

@@ -9,7 +9,7 @@ export class GamesService {
     @Inject(GamesRepository) private gamesRepository: GamesRepository
   ) {}
 
-  async createGame({ gameId, playerName, team }: CreateGameDTO): Promise<Game> {
+  async create({ gameId, playerName, team }: CreateGameDTO): Promise<Game> {
     await this.gamesRepository.createIndex()
     const game = await this.gamesRepository
       .search()

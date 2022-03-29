@@ -2,13 +2,17 @@ import { Inject, Injectable } from '@nestjs/common'
 import { Client } from 'redis-om'
 import { CreatePlayerDto } from './dto/create-player.dto'
 import { UpdatePlayerDto } from './dto/update-player.dto'
+import { PlayerRepository } from './player.repository'
 
 @Injectable()
 export class PlayerService {
-  // constructor(private readonly playerRepository: PlayerRepository) {}
-  constructor(@Inject('STORAGE_CONNECTION') private db: Client) {}
+  constructor(
+    @Inject(PlayerRepository) private playerRepository: PlayerRepository
+  ) {}
 
   create(createPlayerDto: CreatePlayerDto) {
+    // ! NEXT: Create player. What ID should be? Socket ID? Redis ID?
+    // await this.playerRepository.createAndSave(createPlayerDto)
     return 'This action adds a new player'
   }
 

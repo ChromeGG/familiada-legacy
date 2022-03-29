@@ -9,7 +9,7 @@ export class GamesController {
 
   @Post('/create')
   createGame(@Body() game: CreateGameDTO) {
-    return this.gamesService.createGame(game)
+    return this.gamesService.create(game)
   }
 
   @Post(':id')

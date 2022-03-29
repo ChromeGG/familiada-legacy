@@ -3,7 +3,7 @@ import { GamesModule } from './games/games.module'
 
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
-import { PlayerModule } from './player/player.module'
+import { PlayerModule } from './players/player.module'
 
 @Module({
   imports: [GamesModule, PlayerModule],

@@ -16,10 +16,6 @@ export class PlayersService {
     return 'This action adds a new player'
   }
 
-  findAll() {
-    return `This action returns all player`
-  }
-
   async findOne(id: number) {
     // await this.db.fetchRepository
     return `This action returns a #${id} player`
@@ -27,9 +23,5 @@ export class PlayersService {
 
   update(id: number, updatePlayerDto: UpdatePlayerDto) {
     return `This action updates a #${id} player`
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} player`
   }
 }

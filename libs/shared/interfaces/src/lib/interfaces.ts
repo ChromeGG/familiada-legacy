@@ -3,8 +3,6 @@
 
 import { Opaque } from 'type-fest'
 
-// ! NEXT: Przerobić to na Opaque<> (type-fest)
-// ! NEXT: zająć się tworzeniem lobby
 export type TeamColor = Opaque<'RED' | 'BLUE', 'TeamColor'>
 export type PlayerId = Opaque<string, 'PlayerId'>
 export type TeamId = Opaque<string, 'TeamId'>

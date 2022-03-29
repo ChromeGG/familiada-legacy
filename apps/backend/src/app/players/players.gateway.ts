@@ -16,11 +16,6 @@ export class PlayersGateway {
     return this.playerService.create(createPlayerDto)
   }
 
-  @SubscribeMessage('findAllPlayer')
-  findAll() {
-    return this.playerService.findAll()
-  }
-
   @SubscribeMessage('findOnePlayer')
   findOne(@MessageBody() id: number) {
     return this.playerService.findOne(id)
@@ -29,10 +24,5 @@ export class PlayersGateway {
   @SubscribeMessage('updatePlayer')
   update(@MessageBody() updatePlayerDto: UpdatePlayerDto) {
     return this.playerService.update(updatePlayerDto.id, updatePlayerDto)
-  }
-
-  @SubscribeMessage('removePlayer')
-  remove(@MessageBody() id: number) {
-    return this.playerService.remove(id)
   }
 }

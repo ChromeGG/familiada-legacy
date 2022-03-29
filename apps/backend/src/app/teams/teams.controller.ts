@@ -20,11 +20,6 @@ export class TeamsController {
     return this.teamsService.create(createTeamDto)
   }
 
-  @Get()
-  findAll() {
-    return this.teamsService.findAll()
-  }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.teamsService.findOne(+id)
@@ -33,10 +28,5 @@ export class TeamsController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTeamDto: UpdateTeamDto) {
     return this.teamsService.update(+id, updateTeamDto)
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.teamsService.remove(+id)
   }
 }

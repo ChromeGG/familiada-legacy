@@ -1,22 +1,25 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { Client, Entity, EntityData, Schema } from 'redis-om'
 import { JsonRepository } from 'redis-om/dist/repository/repository'
+import { Game as GameI } from '@familiada/shared-interfaces'
 
-interface Game {
-  id: string
-  actualRound: number
-  answeringUserId: string
-  canHitAnswer: [string, string]
-  stage: 'LOBBY' | 'RUNNING' | 'FINISHED'
-}
+// interface Game {
+//   id: string
+//   actualRound: number
+//   answeringUserId: string
+//   canHitAnswer: [string, string]
+//   status: 'LOBBY' | 'RUNNING' | 'FINISHED'
+// }
 
 class Game extends Entity {}
 
 const schema = new Schema(Game, {
   id: { type: 'string' },
   actualRound: { type: 'number' },
+  supervisorId: { type: 'string' },
   answeringUserId: { type: 'string' },
   canHitAnswer: { type: 'string[]' },
+  stage: { type: 'string' },
 })
 
 @Injectable()

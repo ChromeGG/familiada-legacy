@@ -24,8 +24,10 @@ import useTranslation from 'next-translate/useTranslation'
 import {
   JoinToGameFormInput,
   useJoinToGameForm,
-} from '../validation/joinToGame'
+} from '../validation/createGame'
 import { usePlayerContext } from '../contexts/Player'
+import { httpClient } from '../core/httpClient'
+import { useRouter } from 'next/router'
 
 export function Index() {
   const { t } = useTranslation()
@@ -33,6 +35,7 @@ export function Index() {
   const { player, setPlayer } = usePlayerContext()
   const [socket, setSocket] =
     useState<Socket<ServerToClientEvents, ClientToServerEvents>>(null)
+  const router = useRouter()
 
   const joinToGame = async ({
     gameId,
@@ -40,6 +43,13 @@ export function Index() {
     playerName,
   }: JoinToGameFormInput) => {
     console.log('~ gameId, team, playerName', gameId, team, playerName)
+    console.log(httpClient.defaults)
+    const asd = await httpClient.post('games/create', {
+      gameId,
+      team,
+      playerName,
+    })
+    console.log('~ data', asd.data)
 
     // const newSocket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
     //   `http://${window.location.hostname}:3333`

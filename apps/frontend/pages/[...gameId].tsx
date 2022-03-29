@@ -63,17 +63,17 @@ export const getServerSideProps = async (ctx) => {
   const { gameId: gameIdParam } = ctx.params
   const gameId = gameIdParam[0]
 
-  if (gameId !== 'favicon.ico') {
-    const res = await fetch(`http://localhost:3333/api/games/${gameId}`)
-    const game = await res.json()
-    console.log('~ game', game)
+  // if (gameId !== 'favicon.ico') {
+  //   const res = await fetch(`http://localhost:3333/api/games/${gameId}`)
+  //   const game = await res.json()
+  //   console.log('~ game', game)
 
-    return {
-      props: {
-        game,
-      },
-    }
-  }
+  //   return {
+  //     props: {
+  //       game,
+  //     },
+  //   }
+  // }
 
   return {
     props: {},

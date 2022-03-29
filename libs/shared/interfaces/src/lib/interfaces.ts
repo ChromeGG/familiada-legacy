@@ -17,7 +17,7 @@ export interface Player {
   teamId: TeamId
 }
 
-export type Game = { id: string; adminId: string } & (
+export type Game = { id: string; supervisorId: PlayerId } & (
   | {
       status: 'LOBBY' | 'FINISHED'
     }

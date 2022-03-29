@@ -19,9 +19,15 @@ export const useJoinToGameForm = () => {
     playerName: Joi.string()
       .required()
       .min(3)
+      .max(20)
       .default('')
       .label(t('field.playerName')),
-    gameId: Joi.string().required().min(3).default('').label(t('field.gameId')),
+    gameId: Joi.string()
+      .required()
+      .min(3)
+      .max(20)
+      .default('')
+      .label(t('field.gameId')),
     team: Joi.string().valid('RED', 'BLUE').required().label(t('field.team')),
   })
 

@@ -34,19 +34,25 @@ export function Index() {
   const [socket, setSocket] =
     useState<Socket<ServerToClientEvents, ClientToServerEvents>>(null)
 
-  const joinToGame = ({ gameId, team, playerName }: JoinToGameFormInput) => {
-    const newSocket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
-      `http://${window.location.hostname}:3333`
-    )
-    setSocket(newSocket)
-    // ! NEXT there is newSocket.id, but its undefined at start ..?
-    console.log('~ newSocket', newSocket)
-    console.log('socket ID', newSocket.id)
-    setPlayer({ id: newSocket.id, name: playerName, team })
-    newSocket.on('userJoined', (sth) => {
-      console.log('userJoined', sth)
-      // setPlayer((prevPlayers) => [...prevPlayers, sth])
-    })
+  const joinToGame = async ({
+    gameId,
+    team,
+    playerName,
+  }: JoinToGameFormInput) => {
+    console.log('~ gameId, team, playerName', gameId, team, playerName)
+
+    // const newSocket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
+    //   `http://${window.location.hostname}:3333`
+    // )
+    // setSocket(newSocket)
+    // // ! NEXT there is newSocket.id, but its undefined at start ..?
+    // console.log('~ newSocket', newSocket)
+    // console.log('socket ID', newSocket.id)
+    // setPlayer({ id: newSocket.id, name: playerName, team })
+    // newSocket.on('userJoined', (sth) => {
+    //   console.log('userJoined', sth)
+    //   // setPlayer((prevPlayers) => [...prevPlayers, sth])
+    // })
 
     // newSocket.emit('join', localUser)
     // setUsers((prevPlayers) => [...prevPlayers, { name, team }])
@@ -96,7 +102,7 @@ export function Index() {
           </CardContent>
 
           <CardActions>
-            <Button type="submit" variant="contained">{t`join_to_game`}</Button>
+            <Button type="submit" variant="contained">{t`create_game`}</Button>
             <Button onClick={() => console.log(player)}>XXXX</Button>
           </CardActions>
         </Card>

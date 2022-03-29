@@ -1,6 +1,6 @@
 import { AppProps } from 'next/app'
 import Head from 'next/head'
-import { theme } from '../config/theme'
+import { theme } from '../configuration/theme'
 import { ThemeProvider } from '@mui/material/styles'
 import { DefaultSeo } from 'next-seo'
 import { CssBaseline } from '@mui/material'

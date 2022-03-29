@@ -1,5 +1,5 @@
 import { Player } from '@familiada/shared-interfaces'
-import { Controller, Get, Param, Post } from '@nestjs/common'
+import { Body, Controller, Get, Param, Post } from '@nestjs/common'
 
 import { GamesService } from './games.service'
 
@@ -14,7 +14,7 @@ export class GamesController {
   }
 
   @Post('/create')
-  createGame() {
-    return this.gamesService.createGame()
+  createGame(@Body() game: Game) {
+    return this.gamesService.createGame(game)
   }
 }

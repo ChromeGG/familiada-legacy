@@ -2,12 +2,12 @@ import { Inject, Injectable } from '@nestjs/common'
 import { Client } from 'redis-om'
 import { CreatePlayerDto } from './dto/create-player.dto'
 import { UpdatePlayerDto } from './dto/update-player.dto'
-import { PlayerRepository } from './player.repository'
+import { PlayersRepository } from './players.repository'
 
 @Injectable()
-export class PlayerService {
+export class PlayersService {
   constructor(
-    @Inject(PlayerRepository) private playerRepository: PlayerRepository
+    @Inject(PlayersRepository) private playersRepository: PlayersRepository
   ) {}
 
   create(createPlayerDto: CreatePlayerDto) {

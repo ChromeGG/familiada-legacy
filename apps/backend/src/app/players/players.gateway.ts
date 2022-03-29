@@ -3,13 +3,13 @@ import {
   SubscribeMessage,
   MessageBody,
 } from '@nestjs/websockets'
-import { PlayerService } from './player.service'
+import { PlayersService } from './players.service'
 import { CreatePlayerDto } from './dto/create-player.dto'
 import { UpdatePlayerDto } from './dto/update-player.dto'
 
 @WebSocketGateway()
-export class PlayerGateway {
-  constructor(private readonly playerService: PlayerService) {}
+export class PlayersGateway {
+  constructor(private readonly playerService: PlayersService) {}
 
   @SubscribeMessage('createPlayer')
   create(@MessageBody() createPlayerDto: CreatePlayerDto) {

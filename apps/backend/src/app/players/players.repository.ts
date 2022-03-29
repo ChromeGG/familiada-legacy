@@ -19,7 +19,7 @@ const schema = new Schema(Player, {
 })
 
 @Injectable()
-export class PlayerRepository extends JsonRepository<Player> {
+export class PlayersRepository extends JsonRepository<Player> {
   constructor(@Inject('STORAGE_CONNECTION') client: Client) {
     super(schema, client)
   }

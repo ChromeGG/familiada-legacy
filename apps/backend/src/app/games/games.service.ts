@@ -1,7 +1,7 @@
 import { CreateGameDTO } from '@familiada/shared-interfaces'
 import { ConflictException, Inject, Injectable } from '@nestjs/common'
 import { randomBytes } from 'crypto'
-import { GamesRepository, Game } from './game.repository'
+import { GamesRepository, Game } from './games.repository'
 
 @Injectable()
 export class GamesService {

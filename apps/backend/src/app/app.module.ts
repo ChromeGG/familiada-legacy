@@ -3,10 +3,11 @@ import { GamesModule } from './games/games.module'
 
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
-import { PlayerModule } from './players/player.module'
+import { PlayersModule } from './players/players.module'
+import { TeamsModule } from './teams/teams.module'
 
 @Module({
-  imports: [GamesModule, PlayerModule],
+  imports: [GamesModule, PlayersModule, TeamsModule],
   controllers: [AppController],
   providers: [AppService],
 })

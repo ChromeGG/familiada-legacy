@@ -1,4 +1,4 @@
-import { GameId, CreateGameDTO } from '@familiada/shared-interfaces'
+import { CreateGameDTO } from '@familiada/shared-interfaces'
 import { joiResolver } from '@hookform/resolvers/joi'
 import useTranslation from 'next-translate/useTranslation'
 import { useForm } from 'react-hook-form'
@@ -16,12 +16,12 @@ export const useJoinToGameForm = () => {
       .max(20)
       .default('')
       .label(t('field.playerName')),
-    gameId: Joi.string()
+    gameName: Joi.string()
       .required()
       .min(3)
       .max(20)
       .default('')
-      .label(t('field.gameId')),
+      .label(t('field.gameName')),
     team: Joi.string().valid('RED', 'BLUE').required().label(t('field.team')),
   })
 

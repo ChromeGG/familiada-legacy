@@ -1,5 +1,4 @@
 // TODO
-// 1. Middleware do rozpoznawania userów?
 
 import { Opaque } from 'type-fest'
 
@@ -29,13 +28,11 @@ export type Game = { id: string; supervisorId: PlayerId } & (
 
 export interface Team {
   id: TeamId
-  gameId: GameId
+  gameName: string
   color: TeamColor
   lastAnsweringPlayerId: PlayerId
   playersOrder: PlayerId[]
 }
-
-// ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData
 
 export type ClientToServerEvents = {
   join: (user: Player) => void

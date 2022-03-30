@@ -1,6 +1,6 @@
-import { TeamColor } from '@familiada/shared-interfaces'
+import { TeamColor, TeamId } from '@familiada/shared-interfaces'
 
 export class CreatePlayerDto {
   readonly name: string
-  readonly team: TeamColor
+  readonly teamId: TeamId
 }

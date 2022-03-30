@@ -10,11 +10,10 @@ export class PlayersService {
     @Inject(PlayersRepository) private playersRepository: PlayersRepository
   ) {}
 
-  async create({ name, team }: CreatePlayerDto) {
+  async create({ name, teamId }: CreatePlayerDto) {
     console.log('~ name', name)
-    console.log('~ team', team)
-    await this.playersRepository.createAndSave({ name, id: 1, team })
-    return 'This action adds a new player'
+    console.log('~ team', teamId)
+    return await this.playersRepository.createAndSave({ name, teamId })
   }
 
   async findOne(id: number) {

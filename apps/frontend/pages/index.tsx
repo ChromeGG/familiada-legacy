@@ -38,14 +38,12 @@ export function Index() {
   const router = useRouter()
 
   const joinToGame = async ({
-    gameId,
+    gameName,
     team,
     playerName,
   }: JoinToGameFormInput) => {
-    console.log('~ gameId, team, playerName', gameId, team, playerName)
-    console.log(httpClient.defaults)
     const asd = await httpClient.post('games/create', {
-      gameId,
+      gameName,
       team,
       playerName,
     })
@@ -89,8 +87,8 @@ export function Index() {
               autoComplete="off"
             />
             <TextFieldElement
-              name="gameId"
-              label={t`game_id`}
+              name="gameName"
+              label={t`game_id_name`}
               fullWidth
               autoComplete="off"
               sx={{ my: 3 }}

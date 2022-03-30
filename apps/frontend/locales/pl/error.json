@@ -19,7 +19,7 @@
   },
   "field": {
     "name": "nazwa",
-    "gameId": "ID Gry",
+    "gameName": "Nazwa Gry",
     "team": "Drużyna",
     "playerName": "Nazwa gracza",
     "answer": "Odpowiedź"

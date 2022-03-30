@@ -13,7 +13,6 @@ import { JsonRepository } from 'redis-om/dist/repository/repository'
 class Player extends Entity {}
 
 const schema = new Schema(Player, {
-  id: { type: 'string' },
   name: { type: 'string' },
   teamId: { type: 'string' },
 })
@@ -24,8 +23,8 @@ export class PlayersRepository extends JsonRepository<Player> {
     super(schema, client)
   }
 
-  protected async writeEntity(key: string, data: EntityData): Promise<void> {
-    const { id } = data
-    await this.client.jsonset(`Player:${id}`, data)
-  }
+  // protected async writeEntity(key: string, data: EntityData): Promise<void> {
+  //   const { id } = data
+  //   await this.client.jsonset(`Player:${id}`, data)
+  // }
 }

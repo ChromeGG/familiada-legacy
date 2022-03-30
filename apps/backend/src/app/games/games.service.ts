@@ -1,9 +1,10 @@
-import { CreateGameDTO, TeamColor } from '@familiada/shared-interfaces'
+import { CreateGameDTO, TeamColor, TeamId } from '@familiada/shared-interfaces'
 import { ConflictException, Inject, Injectable } from '@nestjs/common'
 import { randomBytes } from 'crypto'
+import { isEmpty } from 'ramda'
 import { PlayersService } from '../players/players.service'
 import { TeamsService } from '../teams/teams.service'
-import { GamesRepository, Game } from './games.repository'
+import { GamesRepository } from './games.repository'
 
 @Injectable()
 export class GamesService {
@@ -13,12 +14,12 @@ export class GamesService {
     @Inject(TeamsService) private teamsService: TeamsService
   ) {}
 
-  async create({ gameId, playerName, team }: CreateGameDTO): Promise<Game> {
+  async create({ gameName, playerName, team }: CreateGameDTO): Promise<any> {
     await this.gamesRepository.createIndex()
     const game = await this.gamesRepository
       .search()
-      .where('id')
-      .equals(gameId)
+      .where('name')
+      .equals(gameName)
       .return.first()
     await this.gamesRepository.dropIndex()
 
@@ -28,17 +29,19 @@ export class GamesService {
 
     const teamRed = await this.teamsService.create({
       color: 'RED',
-      gameId,
+      gameName,
     })
-    console.log('~ teamRed', teamRed)
-    const teamBlue = await this.teamsService.create({ color: 'BLUE', gameId })
-    console.log('~ teamBlue', teamBlue)
+    const teamBlue = await this.teamsService.create({ color: 'BLUE', gameName })
 
-    const asd = await this.playersService.create({ name: playerName, team })
+    const playerGameId = team === 'RED' ? teamRed.entityId : teamBlue.entityId
+    const supervisor = await this.playersService.create({
+      name: playerName,
+      teamId: <TeamId>playerGameId,
+    })
 
     return this.gamesRepository.createAndSave({
-      id: gameId,
-      supervisorId: '',
+      name: gameName,
+      supervisorId: supervisor.entityId,
       stage: 'LOBBY',
     })
   }

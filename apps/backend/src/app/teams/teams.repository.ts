@@ -26,8 +26,8 @@ export class TeamsRepository extends JsonRepository<Team> {
     super(schema, client)
   }
 
-  protected async writeEntity(key: string, data: EntityData): Promise<void> {
-    const { id } = data
-    await this.client.jsonset(`Player:${id}`, data)
-  }
+  // protected async writeEntity(key: string, data: EntityData): Promise<void> {
+  //   const { id } = data
+  //   await this.client.jsonset(`Player:${id}`, data)
+  // }
 }

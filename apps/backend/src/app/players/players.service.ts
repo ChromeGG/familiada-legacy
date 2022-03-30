@@ -10,9 +10,10 @@ export class PlayersService {
     @Inject(PlayersRepository) private playersRepository: PlayersRepository
   ) {}
 
-  create(createPlayerDto: CreatePlayerDto) {
-    // ! NEXT: Create player. What ID should be? Socket ID? Redis ID?
-    // await this.playerRepository.createAndSave(createPlayerDto)
+  async create({ name, team }: CreatePlayerDto) {
+    console.log('~ name', name)
+    console.log('~ team', team)
+    await this.playersRepository.createAndSave({ name, id: 1, team })
     return 'This action adds a new player'
   }
 
@@ -21,7 +22,7 @@ export class PlayersService {
     return `This action returns a #${id} player`
   }
 
-  update(id: number, updatePlayerDto: UpdatePlayerDto) {
+  async update(id: number, updatePlayerDto: UpdatePlayerDto) {
     return `This action updates a #${id} player`
   }
 }

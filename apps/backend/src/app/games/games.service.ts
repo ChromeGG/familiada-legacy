@@ -1,12 +1,16 @@
-import { CreateGameDTO } from '@familiada/shared-interfaces'
+import { CreateGameDTO, TeamColor } from '@familiada/shared-interfaces'
 import { ConflictException, Inject, Injectable } from '@nestjs/common'
 import { randomBytes } from 'crypto'
+import { PlayersService } from '../players/players.service'
+import { TeamsService } from '../teams/teams.service'
 import { GamesRepository, Game } from './games.repository'
 
 @Injectable()
 export class GamesService {
   constructor(
-    @Inject(GamesRepository) private gamesRepository: GamesRepository
+    @Inject(GamesRepository) private gamesRepository: GamesRepository,
+    @Inject(PlayersService) private playersService: PlayersService,
+    @Inject(TeamsService) private teamsService: TeamsService
   ) {}
 
   async create({ gameId, playerName, team }: CreateGameDTO): Promise<Game> {
@@ -17,9 +21,20 @@ export class GamesService {
       .equals(gameId)
       .return.first()
     await this.gamesRepository.dropIndex()
+
     if (game) {
       throw new ConflictException('Game already exists')
     }
+
+    const teamRed = await this.teamsService.create({
+      color: 'RED',
+      gameId,
+    })
+    console.log('~ teamRed', teamRed)
+    const teamBlue = await this.teamsService.create({ color: 'BLUE', gameId })
+    console.log('~ teamBlue', teamBlue)
+
+    const asd = await this.playersService.create({ name: playerName, team })
 
     return this.gamesRepository.createAndSave({
       id: gameId,

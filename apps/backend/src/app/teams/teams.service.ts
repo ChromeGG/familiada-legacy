@@ -1,11 +1,16 @@
-import { Injectable } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import { CreateTeamDto } from './dto/create-team.dto'
 import { UpdateTeamDto } from './dto/update-team.dto'
+import { TeamsRepository } from './teams.repository'
 
 @Injectable()
 export class TeamsService {
-  create(createTeamDto: CreateTeamDto) {
-    return 'This action adds a new team'
+  constructor(
+    @Inject(TeamsRepository) private teamsRepository: TeamsRepository
+  ) {}
+  async create({ color, gameId }: CreateTeamDto) {
+    // await this.teamsRepository.createAndSave({ color, gameId })
+    return this.teamsRepository.createAndSave({ color, gameId })
   }
 
   findOne(id: number) {

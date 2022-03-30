@@ -11,7 +11,7 @@ import { Game as GameI } from '@familiada/shared-interfaces'
 //   status: 'LOBBY' | 'RUNNING' | 'FINISHED'
 // }
 
-class Game extends Entity {}
+export class Game extends Entity {}
 
 const schema = new Schema(Game, {
   id: { type: 'string' },

@@ -3,7 +3,7 @@
 
 import { Opaque } from 'type-fest'
 
-export type TeamColor = Opaque<'RED' | 'BLUE', 'TeamColor'>
+export type TeamColor = 'RED' | 'BLUE'
 export type PlayerId = Opaque<string, 'PlayerId'>
 export type TeamId = Opaque<string, 'TeamId'>
 export type GameId = Opaque<string, 'GameId'>

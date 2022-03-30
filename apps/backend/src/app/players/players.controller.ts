@@ -8,7 +8,7 @@ export class PlayerController {
   constructor(private readonly gamesService: PlayersService) {}
 
   @Post('/create')
-  create(@Body() player: CreateGameDTO) {
+  create(@Body() player: CreateUserDTO) {
     return this.gamesService.create(player)
   }
 }

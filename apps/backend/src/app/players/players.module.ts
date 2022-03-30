@@ -7,5 +7,6 @@ import { PlayersRepository } from './players.repository'
 @Module({
   imports: [StorageModule],
   providers: [PlayersRepository, PlayersGateway, PlayersService],
+  exports: [PlayersService],
 })
 export class PlayersModule {}

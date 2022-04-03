@@ -1,4 +1,4 @@
-import { CreateGameDTO, TeamId } from '@familiada/shared-interfaces'
+import { CreateGameDTO, PlayerId, TeamId } from '@familiada/shared-interfaces'
 import {
   ConflictException,
   Inject,
@@ -30,11 +30,17 @@ export class GamesService {
       throw new ConflictException('Game already exists')
     }
 
+    const newGame = this.gamesRepository.createEntity()
+
     const teamRed = await this.teamsService.create({
       color: 'RED',
-      gameName,
+      gameId: newGame.entityId,
     })
-    const teamBlue = await this.teamsService.create({ color: 'BLUE', gameName })
+
+    const teamBlue = await this.teamsService.create({
+      color: 'BLUE',
+      gameId: newGame.entityId,
+    })
 
     const playerGameId = team === 'RED' ? teamRed.entityId : teamBlue.entityId
     const supervisor = await this.playersService.create({
@@ -42,11 +48,13 @@ export class GamesService {
       teamId: <TeamId>playerGameId,
     })
 
-    return this.gamesRepository.createAndSave({
-      name: gameName,
-      supervisorId: supervisor.entityId,
-      stage: 'LOBBY',
-    })
+    newGame.name = gameName
+    newGame.teamRedId = <TeamId>teamRed.entityId
+    newGame.teamBlueId = <TeamId>teamBlue.entityId
+    newGame.supervisorId = <PlayerId>supervisor.entityId
+    newGame.status = 'LOBBY'
+
+    return this.gamesRepository.save(newGame)
   }
 
   async joinToGame() {

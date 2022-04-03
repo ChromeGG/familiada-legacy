@@ -16,6 +16,7 @@ import { queryClient } from '../core/httpClient'
 import { io, Socket } from 'socket.io-client'
 import { config } from '../configuration'
 import { ReactQueryDevtools } from 'react-query/devtools'
+import { SocketContext } from '../contexts/Socket'
 
 const { apiUrl } = config
 
@@ -32,7 +33,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
     setSocket(newSocket)
     // log socket connection
     newSocket.on('connect', () => {
-      console.log('SOCKET CONNECTED!', newSocket.id)
+      console.log('Socket ID', newSocket.id)
     })
 
     // // update chat on new message dispatched
@@ -41,7 +42,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
     //   setChat([...chat])
     // })
 
-    if (newSocket) return () => socket.disconnect()
+    if (newSocket) return () => newSocket.disconnect()
   }, [])
 
   return (
@@ -59,12 +60,14 @@ function CustomApp({ Component, pageProps }: AppProps) {
       <CssBaseline />
       <QueryClientProvider client={client}>
         <Hydrate state={pageProps.dehydratedState}>
-          <PlayerContext.Provider value={{ player, setPlayer }}>
-            <ThemeProvider theme={theme}>
-              <Component {...pageProps} />
-              <ReactQueryDevtools />
-            </ThemeProvider>
-          </PlayerContext.Provider>
+          <SocketContext.Provider value={{ socket, setSocket }}>
+            <PlayerContext.Provider value={{ player, setPlayer }}>
+              <ThemeProvider theme={theme}>
+                <Component {...pageProps} />
+                <ReactQueryDevtools />
+              </ThemeProvider>
+            </PlayerContext.Provider>
+          </SocketContext.Provider>
         </Hydrate>
       </QueryClientProvider>
     </>

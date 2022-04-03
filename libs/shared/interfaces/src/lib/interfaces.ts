@@ -1,6 +1,7 @@
 // TODO
 
 import { Opaque } from 'type-fest'
+import { Socket } from 'socket.io-client'
 
 export type TeamColor = 'RED' | 'BLUE'
 export type PlayerId = Opaque<string, 'PlayerId'>
@@ -14,7 +15,12 @@ export interface Player {
   teamId: TeamId
 }
 
-export type Game = { id: string; supervisorId: PlayerId } & (
+export type Game = {
+  id: string
+  supervisorId: PlayerId
+  teamRedId: TeamId
+  teamBlueId: TeamId
+} & (
   | {
       status: 'LOBBY' | 'FINISHED'
     }
@@ -40,6 +46,8 @@ export type ClientToServerEvents = {
 }
 
 export type ServerToClientEvents = { userJoined: (user: Player) => void }
+
+export type AppSocket = Socket<ServerToClientEvents, ClientToServerEvents>
 
 export interface SocketData {
   gameId: string

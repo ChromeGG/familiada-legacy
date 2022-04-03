@@ -9,12 +9,16 @@ import { useToggle } from '@react-hookz/web'
 import { GetServerSideProps } from 'next'
 import { queryClient } from '../core/httpClient'
 import { getGame, useGetGame } from '../hooks/game'
-import { GameId } from '@familiada/shared-interfaces'
+import { Game, GameId } from '@familiada/shared-interfaces'
 import { dehydrate } from 'react-query'
 import { checkError } from '../core/errorHandler'
+import { useSocketContext } from '../contexts/Socket'
+import { useEffect } from 'react'
+import { getTeam } from '../hooks/team'
 
 export function GameView() {
   const { t } = useTranslation()
+
   const teamRed: Team = {
     score: 0,
     players: [
@@ -29,13 +33,13 @@ export function GameView() {
     color: 'BLUE',
   }
 
-  const [isAnswering, toggleIsAnswering] = useToggle(false)
+  const [isAnswering, toggleIsAnswering] = useToggle()
   const hitAnswerButton = () => {
-    toggleIsAnswering(true)
+    toggleIsAnswering()
   }
 
-  const { data } = useGetGame('qwe')
-  console.log('~ data', data)
+  // const { data } = useGetGame('qwe')
+  // console.log('~ data', data)
 
   return (
     <Container maxWidth="xl" disableGutters>
@@ -75,8 +79,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const client = queryClient
 
   if (gameId !== 'favicon.ico') {
+    let game: Game
     try {
-      await client.fetchQuery(['game', gameId], () => getGame(gameId))
+      game = await client.fetchQuery(['game', gameId], () => getGame(gameId))
     } catch (error) {
       const { type } = checkError(error)
 
@@ -86,6 +91,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         }
       }
     }
+    const { teamRedId, teamBlueId } = game
+
+    // TODO fetch these data in parallel
+    await client.prefetchQuery(['team', teamRedId], () => getTeam(teamRedId))
+    await client.prefetchQuery(['team', teamBlueId], () => getTeam(teamBlueId))
   }
 
   return {

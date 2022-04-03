@@ -10,7 +10,7 @@ export const httpClient = axios.create({
 })
 
 const defaultQueryFn = async ({ queryKey }) => {
-  const { data } = await httpClient.get(`${apiUrl}${queryKey[0]}`)
+  const { data } = await httpClient.get(`${apiUrl}/api${queryKey[0]}`)
   return data
 }
 

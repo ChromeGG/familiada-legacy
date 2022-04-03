@@ -13,21 +13,18 @@ import {
   ClientToServerEvents,
   ServerToClientEvents,
   Player,
+  CreateGameDTO,
 } from '@familiada/shared-interfaces'
-import JoinToGame, { FormInput } from '../components/JoinToGame'
 import {
   FormContainer,
   RadioButtonGroup,
   TextFieldElement,
 } from 'react-hook-form-mui'
 import useTranslation from 'next-translate/useTranslation'
-import {
-  JoinToGameFormInput,
-  useJoinToGameForm,
-} from '../validation/createGame'
+import { useJoinToGameForm } from '../validation/createGame'
 import { usePlayerContext } from '../contexts/Player'
-import { httpClient } from '../core/httpClient'
 import { useRouter } from 'next/router'
+import { useCreateGameMutation } from '../hooks/game'
 
 export function Index() {
   const { t } = useTranslation()
@@ -36,24 +33,23 @@ export function Index() {
   const [socket, setSocket] =
     useState<Socket<ServerToClientEvents, ClientToServerEvents>>(null)
   const router = useRouter()
-
-  const joinToGame = async ({
+  const createGame = useCreateGameMutation()
+  const useCreateGame = async ({
     gameName,
     team,
     playerName,
-  }: JoinToGameFormInput) => {
-    const asd = await httpClient.post('games/create', {
+  }: CreateGameDTO) => {
+    const asd = createGame.mutate({
       gameName,
       team,
       playerName,
     })
-    console.log('~ data', asd.data)
+    console.log('~ asd', asd)
 
     // const newSocket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
     //   `http://${window.location.hostname}:3333`
     // )
     // setSocket(newSocket)
-    // // ! NEXT there is newSocket.id, but its undefined at start ..?
     // console.log('~ newSocket', newSocket)
     // console.log('socket ID', newSocket.id)
     // setPlayer({ id: newSocket.id, name: playerName, team })
@@ -75,7 +71,7 @@ export function Index() {
     <Container maxWidth="sm">
       <FormContainer
         formContext={form}
-        handleSubmit={form.handleSubmit(joinToGame)}
+        handleSubmit={form.handleSubmit(useCreateGame)}
       >
         <Card>
           <CardHeader title="Familiada" />

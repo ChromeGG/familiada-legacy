@@ -7,8 +7,11 @@ import { CssBaseline } from '@mui/material'
 import { PlayerContext } from '../contexts/Player'
 import { useState } from 'react'
 import { Player } from '@familiada/shared-interfaces'
+import { Hydrate, QueryClientProvider } from 'react-query'
+import { queryClient } from '../core/httpClient'
 
 function CustomApp({ Component, pageProps }: AppProps) {
+  const [client] = useState(() => queryClient)
   const [player, setPlayer] = useState<Player>(null)
 
   return (
@@ -24,11 +27,15 @@ function CustomApp({ Component, pageProps }: AppProps) {
         defaultTitle="Familiada"
       />
       <CssBaseline />
-      <PlayerContext.Provider value={{ player, setPlayer }}>
-        <ThemeProvider theme={theme}>
-          <Component {...pageProps} />
-        </ThemeProvider>
-      </PlayerContext.Provider>
+      <QueryClientProvider client={client}>
+        <Hydrate state={pageProps.dehydratedState}>
+          <PlayerContext.Provider value={{ player, setPlayer }}>
+            <ThemeProvider theme={theme}>
+              <Component {...pageProps} />
+            </ThemeProvider>
+          </PlayerContext.Provider>
+        </Hydrate>
+      </QueryClientProvider>
     </>
   )
 }

@@ -44,7 +44,8 @@ export function Index() {
       team,
       playerName,
     })
-    console.log('~ asd', asd)
+
+    router.push(`/${gameName}`)
 
     // const newSocket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
     //   `http://${window.location.hostname}:3333`

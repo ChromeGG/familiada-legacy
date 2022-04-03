@@ -35,11 +35,13 @@ export class GamesService {
     const teamRed = await this.teamsService.create({
       color: 'RED',
       gameId: newGame.entityId,
+      playersIds: [],
     })
 
     const teamBlue = await this.teamsService.create({
       color: 'BLUE',
       gameId: newGame.entityId,
+      playersIds: [],
     })
 
     const playerGameId = team === 'RED' ? teamRed.entityId : teamBlue.entityId

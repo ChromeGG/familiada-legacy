@@ -9,9 +9,9 @@ export class TeamsService {
   constructor(
     @Inject(TeamsRepository) private teamsRepository: TeamsRepository
   ) {}
-  async create({ color, gameId }: CreateTeamDto) {
+  async create({ color, gameId, playersIds }: CreateTeamDto) {
     // await this.teamsRepository.createAndSave({ color, gameId })
-    return this.teamsRepository.createAndSave({ color, gameId, players: [] })
+    return this.teamsRepository.createAndSave({ color, gameId, playersIds })
   }
 
   async findById(id: TeamId): Promise<any> {

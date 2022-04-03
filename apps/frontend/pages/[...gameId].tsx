@@ -8,12 +8,10 @@ import useTranslation from 'next-translate/useTranslation'
 import { useToggle } from '@react-hookz/web'
 import { GetServerSideProps } from 'next'
 import { queryClient } from '../core/httpClient'
-import { getGame, useGetGame } from '../hooks/game'
+import { getGame } from '../hooks/game'
 import { Game, GameId } from '@familiada/shared-interfaces'
 import { dehydrate } from 'react-query'
 import { checkError } from '../core/errorHandler'
-import { useSocketContext } from '../contexts/Socket'
-import { useEffect } from 'react'
 import { getTeam, useGetTeam } from '../hooks/team'
 
 interface Props {
@@ -24,7 +22,6 @@ export function GameView({ game }: Props) {
 
   const { data: teamRed } = useGetTeam(game.teamRedId)
   const { data: teamBlue } = useGetTeam(game.teamBlueId)
-  console.log('~ teamBlue', teamBlue)
 
   const [isAnswering, toggleIsAnswering] = useToggle()
   const hitAnswerButton = () => {
@@ -69,24 +66,22 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const client = queryClient
 
   let game: Game
-  if (gameId !== 'favicon.ico') {
-    try {
-      game = await client.fetchQuery(['game', gameId], () => getGame(gameId))
-    } catch (error) {
-      const { type } = checkError(error)
+  try {
+    game = await client.fetchQuery(['game', gameId], () => getGame(gameId))
+  } catch (error) {
+    const { type } = checkError(error)
 
-      if (type === 'NOT_FOUND') {
-        return {
-          notFound: true,
-        }
+    if (type === 'NOT_FOUND') {
+      return {
+        notFound: true,
       }
     }
-    const { teamRedId, teamBlueId } = game
-
-    // TODO fetch these data in parallel
-    await client.fetchQuery(['team', teamRedId], () => getTeam(teamRedId))
-    await client.fetchQuery(['team', teamBlueId], () => getTeam(teamBlueId))
   }
+  const { teamRedId, teamBlueId } = game
+
+  // TODO fetch these data in parallel
+  await client.prefetchQuery(['team', teamRedId], () => getTeam(teamRedId))
+  await client.prefetchQuery(['team', teamBlueId], () => getTeam(teamBlueId))
 
   return {
     props: {

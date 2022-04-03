@@ -1,4 +1,5 @@
-import { Inject, Injectable } from '@nestjs/common'
+import { TeamId } from '@familiada/shared-interfaces'
+import { Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { CreateTeamDto } from './dto/create-team.dto'
 import { UpdateTeamDto } from './dto/update-team.dto'
 import { TeamsRepository } from './teams.repository'
@@ -10,11 +11,17 @@ export class TeamsService {
   ) {}
   async create({ color, gameId }: CreateTeamDto) {
     // await this.teamsRepository.createAndSave({ color, gameId })
-    return this.teamsRepository.createAndSave({ color, gameId })
+    return this.teamsRepository.createAndSave({ color, gameId, players: [] })
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} team`
+  async findById(id: TeamId): Promise<any> {
+    const team = await this.teamsRepository.fetch(id)
+
+    if (!team) {
+      throw new NotFoundException(`Team with id ${id} not found`)
+    }
+
+    return team.entityData
   }
 
   update(id: number, updateTeamDto: UpdateTeamDto) {

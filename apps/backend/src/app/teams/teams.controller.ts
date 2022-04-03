@@ -10,6 +10,7 @@ import {
 import { TeamsService } from './teams.service'
 import { CreateTeamDto } from './dto/create-team.dto'
 import { UpdateTeamDto } from './dto/update-team.dto'
+import { TeamId } from '@familiada/shared-interfaces'
 
 @Controller('teams')
 export class TeamsController {
@@ -21,8 +22,8 @@ export class TeamsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.teamsService.findOne(+id)
+  findOne(@Param('id') id: TeamId) {
+    return this.teamsService.findById(id)
   }
 
   @Patch(':id')

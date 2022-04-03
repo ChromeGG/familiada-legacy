@@ -14,32 +14,22 @@ import { dehydrate } from 'react-query'
 import { checkError } from '../core/errorHandler'
 import { useSocketContext } from '../contexts/Socket'
 import { useEffect } from 'react'
-import { getTeam } from '../hooks/team'
+import { getTeam, useGetTeam } from '../hooks/team'
 
-export function GameView() {
+interface Props {
+  game: Game
+}
+export function GameView({ game }: Props) {
   const { t } = useTranslation()
 
-  const teamRed: Team = {
-    score: 0,
-    players: [
-      { id: '1', name: 'Adam' },
-      { id: '2', name: 'Bartek' },
-    ],
-    color: 'RED',
-  }
-  const teamBlue: Team = {
-    score: 0,
-    players: [{ id: '1', name: 'Jan' }],
-    color: 'BLUE',
-  }
+  const { data: teamRed } = useGetTeam(game.teamRedId)
+  const { data: teamBlue } = useGetTeam(game.teamBlueId)
+  console.log('~ teamBlue', teamBlue)
 
   const [isAnswering, toggleIsAnswering] = useToggle()
   const hitAnswerButton = () => {
     toggleIsAnswering()
   }
-
-  // const { data } = useGetGame('qwe')
-  // console.log('~ data', data)
 
   return (
     <Container maxWidth="xl" disableGutters>
@@ -78,8 +68,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const client = queryClient
 
+  let game: Game
   if (gameId !== 'favicon.ico') {
-    let game: Game
     try {
       game = await client.fetchQuery(['game', gameId], () => getGame(gameId))
     } catch (error) {
@@ -94,12 +84,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const { teamRedId, teamBlueId } = game
 
     // TODO fetch these data in parallel
-    await client.prefetchQuery(['team', teamRedId], () => getTeam(teamRedId))
-    await client.prefetchQuery(['team', teamBlueId], () => getTeam(teamBlueId))
+    await client.fetchQuery(['team', teamRedId], () => getTeam(teamRedId))
+    await client.fetchQuery(['team', teamBlueId], () => getTeam(teamBlueId))
   }
 
   return {
     props: {
+      game,
       dehydratedState: dehydrate(client),
     },
   }

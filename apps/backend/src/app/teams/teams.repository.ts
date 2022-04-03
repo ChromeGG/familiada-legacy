@@ -17,7 +17,7 @@ const schema = new Schema(Team, {
   gameId: { type: 'string' },
   color: { type: 'string' },
   lastAnsweringPlayer: { type: 'string' },
-  playersOrder: { type: 'string[]' },
+  players: { type: 'string[]' },
 })
 
 @Injectable()

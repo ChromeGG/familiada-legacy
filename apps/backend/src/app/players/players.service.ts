@@ -11,8 +11,6 @@ export class PlayersService {
   ) {}
 
   async create({ name, teamId }: CreatePlayerDto) {
-    console.log('~ name', name)
-    console.log('~ team', teamId)
     return await this.playersRepository.createAndSave({ name, teamId })
   }
 

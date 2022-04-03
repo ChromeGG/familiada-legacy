@@ -12,9 +12,14 @@ export class GamesController {
     return this.gamesService.create(game)
   }
 
-  @Post(':id')
-  joinToGame(@Param('id') gameId: string, player: Player) {
-    return 0
-    // return this.gamesService.joinToGame({ id: gameId })
+  // @Post(':id')
+  // joinToGame(@Param('id') gameId: string, player: Player) {
+  //   return 0
+  //   // return this.gamesService.joinToGame({ id: gameId })
+  // }
+
+  @Get(':id')
+  getGameById(@Param('id') id: string) {
+    return this.gamesService.findById(id)
   }
 }

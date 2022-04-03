@@ -6,6 +6,12 @@ import AnswerField from '../components/AnswerField'
 import { Team } from '../interfaces'
 import useTranslation from 'next-translate/useTranslation'
 import { useToggle } from '@react-hookz/web'
+import { GetServerSideProps } from 'next'
+import { queryClient } from '../core/httpClient'
+import { getGame, useGetGame } from '../hooks/game'
+import { GameId } from '@familiada/shared-interfaces'
+import { dehydrate } from 'react-query'
+import { checkError } from '../core/errorHandler'
 
 export function GameView() {
   const { t } = useTranslation()
@@ -27,6 +33,9 @@ export function GameView() {
   const hitAnswerButton = () => {
     toggleIsAnswering(true)
   }
+
+  const { data } = useGetGame('qwe')
+  console.log('~ data', data)
 
   return (
     <Container maxWidth="xl" disableGutters>
@@ -59,24 +68,30 @@ export function GameView() {
   )
 }
 
-export const getServerSideProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { gameId: gameIdParam } = ctx.params
-  const gameId = gameIdParam[0]
+  const gameId = gameIdParam[0] as GameId
+
+  const client = queryClient
 
   if (gameId !== 'favicon.ico') {
-    const res = await fetch(`http://localhost:3333/api/games/${gameId}`)
-    const game = await res.json()
-    console.log('~ game', game)
+    try {
+      await client.fetchQuery(['game', gameId], () => getGame(gameId))
+    } catch (error) {
+      const { type } = checkError(error)
 
-    return {
-      props: {
-        game,
-      },
+      if (type === 'NOT_FOUND') {
+        return {
+          notFound: true,
+        }
+      }
     }
   }
 
   return {
-    props: {},
+    props: {
+      dehydratedState: dehydrate(client),
+    },
   }
 }
 

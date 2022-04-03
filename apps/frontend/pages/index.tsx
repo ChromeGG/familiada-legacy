@@ -34,12 +34,12 @@ export function Index() {
     useState<Socket<ServerToClientEvents, ClientToServerEvents>>(null)
   const router = useRouter()
   const createGame = useCreateGameMutation()
-  const useCreateGame = async ({
+  const createGameHandler = async ({
     gameName,
     team,
     playerName,
   }: CreateGameDTO) => {
-    const asd = createGame.mutate({
+    await createGame.mutateAsync({
       gameName,
       team,
       playerName,
@@ -72,7 +72,7 @@ export function Index() {
     <Container maxWidth="sm">
       <FormContainer
         formContext={form}
-        handleSubmit={form.handleSubmit(useCreateGame)}
+        handleSubmit={form.handleSubmit(createGameHandler)}
       >
         <Card>
           <CardHeader title="Familiada" />

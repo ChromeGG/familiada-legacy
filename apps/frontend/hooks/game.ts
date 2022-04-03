@@ -1,14 +1,20 @@
-import { CreateGameDTO } from '@familiada/shared-interfaces'
+import { CreateGameDTO, GameId } from '@familiada/shared-interfaces'
 import { useMutation, useQuery } from 'react-query'
 import { httpClient } from '../core/httpClient'
 
 export type ServerStateKeys = 'game'
 
-export const useGetGame = (gameId: string) => {
-  return useQuery('game')
+export const getGame = async (id: GameId) => {
+  console.log('~ GameId', id)
+  const response = await httpClient.get(`/api/games/${id}`)
+  return response.data
+}
+
+export const useGetGame = (id: GameId) => {
+  return useQuery(['game', id], () => getGame(id))
 }
 
 export const useCreateGameMutation = () =>
   useMutation(({ gameName, playerName, team }: CreateGameDTO) =>
-    httpClient.post('/games/create', { gameName, playerName, team })
+    httpClient.post('/api/games/create', { gameName, playerName, team })
   )

@@ -1,7 +1,10 @@
-import { CreateGameDTO, TeamColor, TeamId } from '@familiada/shared-interfaces'
-import { ConflictException, Inject, Injectable } from '@nestjs/common'
-import { randomBytes } from 'crypto'
-import { isEmpty } from 'ramda'
+import { CreateGameDTO, TeamId } from '@familiada/shared-interfaces'
+import {
+  ConflictException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common'
 import { PlayersService } from '../players/players.service'
 import { TeamsService } from '../teams/teams.service'
 import { GamesRepository } from './games.repository'
@@ -47,13 +50,25 @@ export class GamesService {
   }
 
   async joinToGame() {
-    const id = randomBytes(3).toString('hex')
-    console.log(1123)
-    // console.log(await this.defaultRedisClient.keys('hello'))
-    return { id }
+    // const id = randomBytes(3).toString('hex')
+    // console.log(1123)
+    // // console.log(await this.defaultRedisClient.keys('hello'))
+    // return { id }
   }
 
-  registerUserHit() {
-    return 0
+  async findById(id: string): Promise<any> {
+    await this.gamesRepository.createIndex()
+    const game = await this.gamesRepository
+      .search()
+      .where('name')
+      .equals(id)
+      .return.first()
+    await this.gamesRepository.dropIndex()
+
+    if (!game) {
+      throw new NotFoundException(`Game with id ${id} not found`)
+    }
+
+    return game.entityData
   }
 }

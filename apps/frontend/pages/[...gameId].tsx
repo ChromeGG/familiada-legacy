@@ -13,6 +13,7 @@ import { Game, GameId } from '@familiada/shared-interfaces'
 import { dehydrate } from 'react-query'
 import { checkError } from '../core/errorHandler'
 import { getTeam, useGetTeam } from '../hooks/team'
+import JoinToGameFrom from '../components/JoinToGameFrom'
 
 interface Props {
   game: Game
@@ -55,6 +56,9 @@ export function GameView({ game }: Props) {
           </Grid>
         </Grid>
       </Grid>
+      <Container sx={{ display: 'flex', justifyContent: 'center' }}>
+        <JoinToGameFrom game={game} />
+      </Container>
     </Container>
   )
 }

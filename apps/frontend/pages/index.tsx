@@ -21,14 +21,14 @@ import {
   TextFieldElement,
 } from 'react-hook-form-mui'
 import useTranslation from 'next-translate/useTranslation'
-import { useJoinToGameForm } from '../validation/createGame'
+import { useCreateGameForm } from '../validation/game'
 import { usePlayerContext } from '../contexts/Player'
 import { useRouter } from 'next/router'
 import { useCreateGameMutation } from '../hooks/game'
 
 export function Index() {
   const { t } = useTranslation()
-  const form = useJoinToGameForm()
+  const form = useCreateGameForm()
   const { player, setPlayer } = usePlayerContext()
   const [socket, setSocket] =
     useState<Socket<ServerToClientEvents, ClientToServerEvents>>(null)
@@ -108,7 +108,6 @@ export function Index() {
 
           <CardActions>
             <Button type="submit" variant="contained">{t`create_game`}</Button>
-            <Button onClick={() => console.log(player)}>XXXX</Button>
           </CardActions>
         </Card>
       </FormContainer>

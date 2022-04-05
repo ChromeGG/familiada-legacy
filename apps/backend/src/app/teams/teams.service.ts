@@ -17,12 +17,14 @@ export class TeamsService {
   }
 
   async findById(id: TeamId): Promise<any> {
+    console.log('~ id', id)
     const team = await this.teamsRepository.fetch(id)
 
     if (!team) {
       throw new NotFoundException(`Team with id ${id} not found`)
     }
 
+    console.log(team.entityData)
     team.entityData.players = await this.playersService.findByIds(
       <PlayerId[]>team.entityData.playersIds
     )

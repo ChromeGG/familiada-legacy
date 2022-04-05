@@ -15,10 +15,11 @@ interface Props {
 
 const PlayersList = ({ team }: Props) => {
   const { t } = useTranslation()
+  console.log('~ team', team)
 
   return (
     <Card>
-      <CardHeader title={team.color === 'RED' ? t`team_red` : t`team_red`} />
+      <CardHeader title={team.color === 'RED' ? t`team_red` : t`team_blue`} />
       <CardContent>
         <List>
           {team.players.map((player) => {

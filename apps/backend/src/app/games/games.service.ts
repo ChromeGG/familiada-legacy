@@ -70,11 +70,14 @@ export class GamesService {
     return this.gamesRepository.save(newGame)
   }
 
-  async joinToGame() {
-    // const id = randomBytes(3).toString('hex')
-    // console.log(1123)
-    // // console.log(await this.defaultRedisClient.keys('hello'))
-    // return { id }
+  async joinToGame({ name, teamId }) {
+    console.log('~ { name, team, gameId }', { name, teamId })
+
+    // ! NEXT: stworzyć usera i przydzielić mu teama
+    this.playersService.create({ name, teamId })
+    this.teamsService.joinToTeam(teamId, name)
+
+    return 1
   }
 
   async findById(id: string): Promise<any> {

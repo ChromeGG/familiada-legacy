@@ -21,6 +21,10 @@ export class PlayersService {
   }
 
   async findByIds(ids: PlayerId[]) {
+    if (!ids.length) {
+      return []
+    }
+
     await this.playersRepository.createIndex()
     const players = await this.playersRepository.search().return.all()
     await this.playersRepository.dropIndex()

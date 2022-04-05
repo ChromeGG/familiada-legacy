@@ -17,7 +17,11 @@ export class GamesService {
     @Inject(TeamsService) private teamsService: TeamsService
   ) {}
 
-  async create({ gameName, playerName, team }: CreateGameDTO): Promise<any> {
+  async create({
+    gameName,
+    playerName,
+    playerTeam,
+  }: CreateGameDTO): Promise<any> {
     await this.gamesRepository.createIndex()
     const game = await this.gamesRepository
       .search()
@@ -44,11 +48,18 @@ export class GamesService {
       playersIds: [],
     })
 
-    const playerGameId = team === 'RED' ? teamRed.entityId : teamBlue.entityId
+    const playerGameId =
+      playerTeam === 'RED' ? teamRed.entityId : teamBlue.entityId
     const supervisor = await this.playersService.create({
       name: playerName,
       teamId: <TeamId>playerGameId,
     })
+
+    if (playerTeam === 'RED') {
+      this.teamsService.joinToTeam(teamRed.entityId, supervisor.entityId)
+    } else {
+      this.teamsService.joinToTeam(teamBlue.entityId, supervisor.entityId)
+    }
 
     newGame.name = gameName
     newGame.teamRedId = <TeamId>teamRed.entityId

@@ -23,7 +23,7 @@ const PlayersList = ({ team }: Props) => {
         <List>
           {team.players.map((player) => {
             return (
-              <ListItem key={player.id}>
+              <ListItem key={player.name}>
                 <ListItemText>{player.name}</ListItemText>
               </ListItem>
             )

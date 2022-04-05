@@ -1,3 +1,4 @@
+import { PlayerId } from '@familiada/shared-interfaces'
 import { Inject, Injectable } from '@nestjs/common'
 import { Client } from 'redis-om'
 import { CreatePlayerDto } from './dto/create-player.dto'
@@ -17,6 +18,18 @@ export class PlayersService {
   async findOne(id: number) {
     // await this.db.fetchRepository
     return `This action returns a #${id} player`
+  }
+
+  async findByIds(ids: PlayerId[]) {
+    await this.playersRepository.createIndex()
+    const players = await this.playersRepository.search().return.all()
+    await this.playersRepository.dropIndex()
+
+    const results = ids.map(
+      (id) => players.find((player) => player.entityId === id).entityData
+    )
+
+    return results
   }
 
   async update(id: number, updatePlayerDto: UpdatePlayerDto) {

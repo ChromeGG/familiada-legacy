@@ -1,5 +1,6 @@
-import { TeamId } from '@familiada/shared-interfaces'
+import { PlayerId, TeamId } from '@familiada/shared-interfaces'
 import { Inject, Injectable, NotFoundException } from '@nestjs/common'
+import { PlayersService } from '../players/players.service'
 import { CreateTeamDto } from './dto/create-team.dto'
 import { UpdateTeamDto } from './dto/update-team.dto'
 import { TeamsRepository } from './teams.repository'
@@ -7,7 +8,8 @@ import { TeamsRepository } from './teams.repository'
 @Injectable()
 export class TeamsService {
   constructor(
-    @Inject(TeamsRepository) private teamsRepository: TeamsRepository
+    @Inject(TeamsRepository) private teamsRepository: TeamsRepository,
+    @Inject(PlayersService) private playersService: PlayersService
   ) {}
   async create({ color, gameId, playersIds }: CreateTeamDto) {
     // await this.teamsRepository.createAndSave({ color, gameId })
@@ -21,7 +23,22 @@ export class TeamsService {
       throw new NotFoundException(`Team with id ${id} not found`)
     }
 
+    team.entityData.players = await this.playersService.findByIds(
+      <PlayerId[]>team.entityData.playersIds
+    )
     return team.entityData
+  }
+
+  async joinToTeam(teamId: TeamId, playerId: number) {
+    const team = await this.teamsRepository.fetch(teamId)
+
+    if (!team) {
+      throw new NotFoundException(`Team with id ${teamId} not found`)
+    }
+
+    // TODO TS error, but it's working
+    team.entityData.playersIds.push(playerId)
+    await this.teamsRepository.save(team)
   }
 
   update(id: number, updateTeamDto: UpdateTeamDto) {

@@ -37,7 +37,7 @@ export interface Team {
   gameName: string
   color: TeamColor
   lastAnsweringPlayerId: PlayerId
-  playersOrder: PlayerId[]
+  playersIds: PlayerId[]
 }
 
 export type ClientToServerEvents = {

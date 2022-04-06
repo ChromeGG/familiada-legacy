@@ -17,7 +17,6 @@ export class TeamsService {
   }
 
   async findById(id: TeamId): Promise<any> {
-    console.log('~ id', id)
     const team = await this.teamsRepository.fetch(id)
 
     if (!team) {
@@ -31,7 +30,7 @@ export class TeamsService {
     return team.entityData
   }
 
-  async joinToTeam(teamId: TeamId, playerId: number) {
+  async joinToTeam(teamId: TeamId, playerId: PlayerId) {
     const team = await this.teamsRepository.fetch(teamId)
 
     if (!team) {

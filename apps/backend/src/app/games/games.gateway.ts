@@ -15,7 +15,7 @@ import {
 
 @WebSocketGateway({ cors: '*' })
 export class GamesGateway {
-  constructor(private readonly gamesService: GamesService) {}
+  // constructor(private readonly gamesService: GamesService) {}
   @WebSocketServer()
   server: Server<ClientToServerEvents, ServerToClientEvents>
 
@@ -33,7 +33,7 @@ export class GamesGateway {
     // this.server.emit('lockAnswering')
     //
     // To ustawia w round[0].firstAnswerHit: Adam
-    this.gamesService.registerUserHit()
+    // this.gamesService.registerUserHit()
     // console.log('~ socket', client.rooms)
     // console.log('~ socket', this.server.in('123').allSockets)
     // console.log('~ user', user)

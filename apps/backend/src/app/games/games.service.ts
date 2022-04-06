@@ -1,12 +1,21 @@
-import { CreateGameDTO, PlayerId, TeamId } from '@familiada/shared-interfaces'
+import {
+  ClientToServerEvents,
+  CreateGameDTO,
+  PlayerId,
+  ServerToClientEvents,
+  TeamId,
+} from '@familiada/shared-interfaces'
 import {
   ConflictException,
   Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common'
+import { WebSocketServer } from '@nestjs/websockets'
+import { Server } from 'socket.io'
 import { PlayersService } from '../players/players.service'
 import { TeamsService } from '../teams/teams.service'
+import { GamesGateway } from './games.gateway'
 import { GamesRepository } from './games.repository'
 
 @Injectable()
@@ -14,7 +23,8 @@ export class GamesService {
   constructor(
     @Inject(GamesRepository) private gamesRepository: GamesRepository,
     @Inject(PlayersService) private playersService: PlayersService,
-    @Inject(TeamsService) private teamsService: TeamsService
+    @Inject(TeamsService) private teamsService: TeamsService,
+    private readonly gamesGateway: GamesGateway
   ) {}
 
   async create({
@@ -71,11 +81,14 @@ export class GamesService {
   }
 
   async joinToGame({ name, teamId }) {
-    console.log('~ { name, team, gameId }', { name, teamId })
+    console.log('~ { name, team }', { name, teamId })
 
-    // ! NEXT: stworzyć usera i przydzielić mu teama
-    this.playersService.create({ name, teamId })
-    this.teamsService.joinToTeam(teamId, name)
+    const user = await this.playersService.create({ name, teamId })
+    console.log('~ user', user)
+
+    this.teamsService.joinToTeam(teamId, user.entityId)
+
+    this.gamesGateway.server.emit('userJoined', user)
 
     return 1
   }

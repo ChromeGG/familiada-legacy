@@ -21,15 +21,14 @@ interface Props {
   game: any
 }
 
-const JoinToGameFrom = ({ gameId }: Props) => {
-  console.log('~ gameId', gameId)
+const JoinToGameFrom = ({ game }: Props) => {
   const { t } = useTranslation()
   const form = useJoinToGameForm()
   const joinToGame = useJoinToGameMutation()
 
   const joinToGameHandler = async ({ name, team }: JoinToGameInput) => {
     console.log('joinToGameHandler', name, team)
-    const teamId = team === 'red' ? game.teamRed : game.teamBlue
+    const teamId = team === 'red' ? game.teamRedId : game.teamBlueId
     const asd = await joinToGame.mutateAsync({ name, teamId })
     console.log('~ asd', asd)
   }

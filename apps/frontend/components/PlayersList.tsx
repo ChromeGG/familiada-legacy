@@ -15,7 +15,6 @@ interface Props {
 
 const PlayersList = ({ team }: Props) => {
   const { t } = useTranslation()
-  console.log('~ team', team)
 
   return (
     <Card>

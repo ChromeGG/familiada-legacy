@@ -36,6 +36,13 @@ function CustomApp({ Component, pageProps }: AppProps) {
       console.log('Socket ID', newSocket.id)
     })
 
+    newSocket.on('userJoined', (user) => {
+      const data = client.getQueryData(['team', user.teamId])
+      data.players = [...data.players, user]
+      data.playersIds = [...data.playersIds, user.entityId]
+      client.setQueryData(['team', user.teamId], data)
+    })
+
     // // update chat on new message dispatched
     // socket.on('message', (message: IMsg) => {
     //   chat.push(message)

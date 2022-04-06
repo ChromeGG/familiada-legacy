@@ -20,7 +20,7 @@ const AnswerField = () => {
   const form = useAnswerForm()
 
   const answerForQuestion = (answer: AnswerFormInput) => {
-    console.log(answer)
+    // console.log(answer)
   }
   return (
     <FormContainer

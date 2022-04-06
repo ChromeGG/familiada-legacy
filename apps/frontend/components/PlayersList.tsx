@@ -18,12 +18,12 @@ const PlayersList = ({ team }: Props) => {
 
   return (
     <Card>
-      <CardHeader title={team.color === 'RED' ? t`team_red` : t`team_red`} />
+      <CardHeader title={team.color === 'RED' ? t`team_red` : t`team_blue`} />
       <CardContent>
         <List>
           {team.players.map((player) => {
             return (
-              <ListItem key={player.id}>
+              <ListItem key={player.name}>
                 <ListItemText>{player.name}</ListItemText>
               </ListItem>
             )

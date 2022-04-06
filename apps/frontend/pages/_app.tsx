@@ -1,15 +1,56 @@
 import { AppProps } from 'next/app'
 import Head from 'next/head'
-import { theme } from '../config/theme'
+import { theme } from '../configuration/theme'
 import { ThemeProvider } from '@mui/material/styles'
 import { DefaultSeo } from 'next-seo'
 import { CssBaseline } from '@mui/material'
 import { PlayerContext } from '../contexts/Player'
-import { useState } from 'react'
-import { Player } from '@familiada/shared-interfaces'
+import { useEffect, useState } from 'react'
+import {
+  ClientToServerEvents,
+  Player,
+  ServerToClientEvents,
+} from '@familiada/shared-interfaces'
+import { Hydrate, QueryClientProvider } from 'react-query'
+import { queryClient } from '../core/httpClient'
+import { io, Socket } from 'socket.io-client'
+import { config } from '../configuration'
+import { ReactQueryDevtools } from 'react-query/devtools'
+import { SocketContext } from '../contexts/Socket'
+
+const { apiUrl } = config
 
 function CustomApp({ Component, pageProps }: AppProps) {
+  const [client] = useState(() => queryClient)
   const [player, setPlayer] = useState<Player>(null)
+  const [socket, setSocket] =
+    useState<Socket<ServerToClientEvents, ClientToServerEvents>>(null)
+
+  useEffect((): any => {
+    const newSocket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
+      `${apiUrl}`
+    )
+    setSocket(newSocket)
+    // log socket connection
+    newSocket.on('connect', () => {
+      console.log('Socket ID', newSocket.id)
+    })
+
+    newSocket.on('userJoined', (user) => {
+      const data = client.getQueryData(['team', user.teamId])
+      data.players = [...data.players, user]
+      data.playersIds = [...data.playersIds, user.entityId]
+      client.setQueryData(['team', user.teamId], data)
+    })
+
+    // // update chat on new message dispatched
+    // socket.on('message', (message: IMsg) => {
+    //   chat.push(message)
+    //   setChat([...chat])
+    // })
+
+    if (newSocket) return () => newSocket.disconnect()
+  }, [])
 
   return (
     <>
@@ -24,11 +65,18 @@ function CustomApp({ Component, pageProps }: AppProps) {
         defaultTitle="Familiada"
       />
       <CssBaseline />
-      <PlayerContext.Provider value={{ player, setPlayer }}>
-        <ThemeProvider theme={theme}>
-          <Component {...pageProps} />
-        </ThemeProvider>
-      </PlayerContext.Provider>
+      <QueryClientProvider client={client}>
+        <Hydrate state={pageProps.dehydratedState}>
+          <SocketContext.Provider value={{ socket, setSocket }}>
+            <PlayerContext.Provider value={{ player, setPlayer }}>
+              <ThemeProvider theme={theme}>
+                <Component {...pageProps} />
+                <ReactQueryDevtools />
+              </ThemeProvider>
+            </PlayerContext.Provider>
+          </SocketContext.Provider>
+        </Hydrate>
+      </QueryClientProvider>
     </>
   )
 }

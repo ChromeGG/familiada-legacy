@@ -28,7 +28,7 @@ const Board = () => {
         color: 'greenyellow',
       }}
     >
-      <Grid container xs="auto">
+      <Grid container>
         <Grid item xs={12} textAlign="center">
           <Typography fontFamily={`"Press Start 2P"`}>123</Typography>
         </Grid>

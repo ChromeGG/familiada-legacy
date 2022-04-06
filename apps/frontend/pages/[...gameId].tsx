@@ -6,26 +6,27 @@ import AnswerField from '../components/AnswerField'
 import { Team } from '../interfaces'
 import useTranslation from 'next-translate/useTranslation'
 import { useToggle } from '@react-hookz/web'
+import { GetServerSideProps } from 'next'
+import { queryClient } from '../core/httpClient'
+import { getGame } from '../hooks/game'
+import { Game, GameId } from '@familiada/shared-interfaces'
+import { dehydrate } from 'react-query'
+import { checkError } from '../core/errorHandler'
+import { getTeam, useGetTeam } from '../hooks/team'
+import JoinToGameFrom from '../components/JoinToGameFrom'
 
-export function GameView() {
+interface Props {
+  game: Game
+}
+export function GameView({ game }: Props) {
   const { t } = useTranslation()
-  const teamRed: Team = {
-    score: 0,
-    players: [
-      { id: '1', name: 'Adam' },
-      { id: '2', name: 'Bartek' },
-    ],
-    color: 'RED',
-  }
-  const teamBlue: Team = {
-    score: 0,
-    players: [{ id: '1', name: 'Jan' }],
-    color: 'BLUE',
-  }
 
-  const [isAnswering, toggleIsAnswering] = useToggle(false)
+  const { data: teamRed } = useGetTeam(game.teamRedId)
+  const { data: teamBlue } = useGetTeam(game.teamBlueId)
+
+  const [isAnswering, toggleIsAnswering] = useToggle()
   const hitAnswerButton = () => {
-    toggleIsAnswering(true)
+    toggleIsAnswering()
   }
 
   return (
@@ -55,28 +56,42 @@ export function GameView() {
           </Grid>
         </Grid>
       </Grid>
+      <Container sx={{ display: 'flex', justifyContent: 'center' }}>
+        <JoinToGameFrom game={game} />
+      </Container>
     </Container>
   )
 }
 
-export const getServerSideProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { gameId: gameIdParam } = ctx.params
-  const gameId = gameIdParam[0]
+  const gameId = gameIdParam[0] as GameId
 
-  if (gameId !== 'favicon.ico') {
-    const res = await fetch(`http://localhost:3333/api/games/${gameId}`)
-    const game = await res.json()
-    console.log('~ game', game)
+  const client = queryClient
 
-    return {
-      props: {
-        game,
-      },
+  let game: Game
+  try {
+    game = await client.fetchQuery(['game', gameId], () => getGame(gameId))
+  } catch (error) {
+    const { type } = checkError(error)
+
+    if (type === 'NOT_FOUND') {
+      return {
+        notFound: true,
+      }
     }
   }
+  const { teamRedId, teamBlueId } = game
+
+  // TODO fetch these data in parallel
+  await client.prefetchQuery(['team', teamRedId], () => getTeam(teamRedId))
+  await client.prefetchQuery(['team', teamBlueId], () => getTeam(teamBlueId))
 
   return {
-    props: {},
+    props: {
+      game,
+      dehydratedState: dehydrate(client),
+    },
   }
 }
 

@@ -13,40 +13,51 @@ import {
   ClientToServerEvents,
   ServerToClientEvents,
   Player,
+  CreateGameDTO,
 } from '@familiada/shared-interfaces'
-import JoinToGame, { FormInput } from '../components/JoinToGame'
 import {
   FormContainer,
   RadioButtonGroup,
   TextFieldElement,
 } from 'react-hook-form-mui'
 import useTranslation from 'next-translate/useTranslation'
-import {
-  JoinToGameFormInput,
-  useJoinToGameForm,
-} from '../validation/joinToGame'
+import { useCreateGameForm } from '../validation/game'
 import { usePlayerContext } from '../contexts/Player'
+import { useRouter } from 'next/router'
+import { useCreateGameMutation } from '../hooks/game'
 
 export function Index() {
   const { t } = useTranslation()
-  const form = useJoinToGameForm()
+  const form = useCreateGameForm()
   const { player, setPlayer } = usePlayerContext()
   const [socket, setSocket] =
     useState<Socket<ServerToClientEvents, ClientToServerEvents>>(null)
-
-  const joinToGame = ({ gameId, team, playerName }: JoinToGameFormInput) => {
-    const newSocket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
-      `http://${window.location.hostname}:3333`
-    )
-    setSocket(newSocket)
-    // ! NEXT there is newSocket.id, but its undefined at start ..?
-    console.log('~ newSocket', newSocket)
-    console.log('socket ID', newSocket.id)
-    setPlayer({ id: newSocket.id, name: playerName, team })
-    newSocket.on('userJoined', (sth) => {
-      console.log('userJoined', sth)
-      // setPlayer((prevPlayers) => [...prevPlayers, sth])
+  const router = useRouter()
+  const createGame = useCreateGameMutation()
+  const createGameHandler = async ({
+    gameName,
+    team,
+    playerName,
+  }: CreateGameDTO) => {
+    await createGame.mutateAsync({
+      gameName,
+      team,
+      playerName,
     })
+
+    router.push(`/${gameName}`)
+
+    // const newSocket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
+    //   `http://${window.location.hostname}:3333`
+    // )
+    // setSocket(newSocket)
+    // console.log('~ newSocket', newSocket)
+    // console.log('socket ID', newSocket.id)
+    // setPlayer({ id: newSocket.id, name: playerName, team })
+    // newSocket.on('userJoined', (sth) => {
+    //   console.log('userJoined', sth)
+    //   // setPlayer((prevPlayers) => [...prevPlayers, sth])
+    // })
 
     // newSocket.emit('join', localUser)
     // setUsers((prevPlayers) => [...prevPlayers, { name, team }])
@@ -61,7 +72,7 @@ export function Index() {
     <Container maxWidth="sm">
       <FormContainer
         formContext={form}
-        handleSubmit={form.handleSubmit(joinToGame)}
+        handleSubmit={form.handleSubmit(createGameHandler)}
       >
         <Card>
           <CardHeader title="Familiada" />
@@ -73,8 +84,8 @@ export function Index() {
               autoComplete="off"
             />
             <TextFieldElement
-              name="gameId"
-              label={t`game_id`}
+              name="gameName"
+              label={t`game_id_name`}
               fullWidth
               autoComplete="off"
               sx={{ my: 3 }}
@@ -96,8 +107,7 @@ export function Index() {
           </CardContent>
 
           <CardActions>
-            <Button type="submit" variant="contained">{t`join_to_game`}</Button>
-            <Button onClick={() => console.log(player)}>XXXX</Button>
+            <Button type="submit" variant="contained">{t`create_game`}</Button>
           </CardActions>
         </Card>
       </FormContainer>

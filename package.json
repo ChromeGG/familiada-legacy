@@ -27,8 +27,6 @@
     "@nrwl/next": "13.4.6",
     "@react-hookz/web": "13.1.0",
     "axios": "0.25.0",
-    "class-transformer": "^0.5.1",
-    "class-validator": "^0.13.2",
     "core-js": "3.6.5",
     "joi": "17.6.0",
     "mdi-material-ui": "7.2.0",

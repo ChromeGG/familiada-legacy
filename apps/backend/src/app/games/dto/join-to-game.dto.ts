@@ -1,10 +1,12 @@
 import { PlayerId, TeamId } from '@familiada/shared-interfaces'
-import { isString, isEmail } from 'class-validator'
+import * as Joi from 'joi'
 
 export class JoinToGameDto {
-  // ! NEXT: Fix it
-  @isString()
-  teamId: string
-  @isString()
+  teamId: TeamId
   playerId: PlayerId
 }
+
+export const joinToGameSchema = Joi.object({
+  teamId: Joi.string().required(),
+  playerId: Joi.string().required(),
+})

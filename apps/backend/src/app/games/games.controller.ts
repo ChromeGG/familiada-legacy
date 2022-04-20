@@ -1,5 +1,6 @@
 import { CreateGameDTO, Player } from '@familiada/shared-interfaces'
 import { Body, Controller, Get, Param, Post } from '@nestjs/common'
+// import { JoinToGameDto } from './dto/join-to-game.dto'
 
 import { GamesService } from './games.service'
 
@@ -15,7 +16,6 @@ export class GamesController {
   @Post('/join')
   joinToGame(@Body() joinToGameInput) {
     return this.gamesService.joinToGame(joinToGameInput)
-    // return this.gamesService.joinToGame({ id: gameId })
   }
 
   @Get(':id')

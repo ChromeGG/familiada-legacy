@@ -21,7 +21,6 @@ export class GamesGateway {
 
   @SubscribeMessage('answer')
   handleMessage(@MessageBody() message: string): void {
-    // console.log('~ answer', message)
     // this.server.to().emit('message', message)
   }
 
@@ -34,24 +33,16 @@ export class GamesGateway {
     //
     // To ustawia w round[0].firstAnswerHit: Adam
     // this.gamesService.registerUserHit()
-    // console.log('~ socket', client.rooms)
-    // console.log('~ socket', this.server.in('123').allSockets)
-    // console.log('~ user', user)
     this.server.emit('userJoined', user)
   }
 
   @SubscribeMessage('join')
   async join(@ConnectedSocket() client: Socket, @MessageBody() user: Player) {
-    // console.log('~ socket', client.rooms)
-    // console.log('~ socket', this.server.in('123').allSockets)
-    // console.log('~ user', user)
     // this.server.emit('userJoined', user)
   }
 
   // TODO add validation, maybe https://github.com/elisvathi/joi-typescript-validator?
   async handleConnection(client: Socket, user: Player) {
-    // console.log(client.id)
     return client
-    // client.join()
   }
 }

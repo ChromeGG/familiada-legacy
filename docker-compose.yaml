@@ -6,6 +6,11 @@ services:
     image: redislabs/redismod:preview
     ports:
       - 6379:6379
+  redis-test:
+    container_name: 'redis-test'
+    image: redislabs/redismod:preview
+    ports:
+      - 6380:6379
 
   redis-commander:
     image: rediscommander/redis-commander:latest

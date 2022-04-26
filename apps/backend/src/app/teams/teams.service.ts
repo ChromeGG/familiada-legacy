@@ -24,7 +24,7 @@ export class TeamsService {
       throw new NotFoundException(`Team with id ${id} not found`)
     }
 
-    // console.log(team.entityData)
+    // @ts-ignore
     team.entityData.players = await this.playersService.findByIds(
       <PlayerId[]>team.entityData.playersIds
     )
@@ -32,6 +32,7 @@ export class TeamsService {
   }
 
   async joinToTeam(teamId, playerId) {
+    console.log('joinToTeam', teamId, playerId)
     const team = await this.teamsRepository.fetch(teamId)
     console.log('~ team', team)
 
@@ -41,6 +42,7 @@ export class TeamsService {
 
     // TODO TS error, but it's working
     console.log('team.entityData', team.entityData)
+    // @ts-ignore
     team.entityData.playersIds.push(playerId)
     await this.teamsRepository.save(team)
   }

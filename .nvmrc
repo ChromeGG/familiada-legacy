@@ -1,3 +1,4 @@
+# TODO it's not working
 cd() {
   builtin cd "$@"
   if [[ -f .nvmrc ]]; then

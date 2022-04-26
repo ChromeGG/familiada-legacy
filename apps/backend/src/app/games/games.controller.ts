@@ -18,6 +18,7 @@ export class GamesController {
 
   @Post('/join')
   joinToGame(@Body() joinToGameInput: JoinToGameDto) {
+    // @ts-ignore
     return this.gamesService.joinToGame(joinToGameInput)
   }
 

@@ -36,12 +36,12 @@ export function Index() {
   const createGame = useCreateGameMutation()
   const createGameHandler = async ({
     gameName,
-    team,
+    playerTeam,
     playerName,
   }: CreateGameDTO) => {
     await createGame.mutateAsync({
       gameName,
-      team,
+      playerTeam,
       playerName,
     })
 
@@ -88,7 +88,7 @@ export function Index() {
             />
             <RadioButtonGroup
               label={t`team`}
-              name="team"
+              name="playerTeam"
               options={[
                 {
                   id: 'RED',

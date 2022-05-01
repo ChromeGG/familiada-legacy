@@ -2,10 +2,10 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
-    "module": "esnext",
+    "module": "es2022",
     "types": ["jest", "node"],
-    "target": "esnext",
+    "target": "es2022",
     "esModuleInterop": true
   },
-  "include": ["**/*.test.ts", "**/*.spec.ts", "**/*.d.ts", "jest.setup.ts"]
+  "include": ["**/*.test.ts", "**/*.spec.ts", "**/*.d.ts", "jest.setup.ts", "./src/tests/tester.ts"]
 }

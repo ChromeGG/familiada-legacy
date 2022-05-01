@@ -1,12 +1,12 @@
 import { PlayerId, TeamId } from '@familiada/shared-interfaces'
-import * as Joi from 'joi'
+import { Joi } from '../../../validator/base'
 
-export class JoinToGameDto {
+export interface JoinToGameDto {
   teamId: TeamId
-  playerId: PlayerId
+  name: PlayerId
 }
 
-export const joinToGameSchema = Joi.object({
+export const joinToGameSchema = Joi.object<JoinToGameDto>({
   teamId: Joi.string().required(),
-  playerId: Joi.string().required(),
+  name: Joi.string().required(),
 })

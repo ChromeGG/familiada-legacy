@@ -83,6 +83,7 @@ export class GamesService {
   async joinToGame({ name, teamId }) {
     const user = await this.playersService.create({ name, teamId })
 
+    // TODO this should be normalized ({input1, input2} vs (input1, input2))
     this.teamsService.joinToTeam(teamId, user.entityId)
     // @ts-ignore
     this.gamesGateway.server.emit('userJoined', user)

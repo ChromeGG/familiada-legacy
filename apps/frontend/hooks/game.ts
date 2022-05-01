@@ -21,6 +21,6 @@ export const useCreateGameMutation = () =>
   )
 
 export const useJoinToGameMutation = () =>
-  useMutation((payload: JoinToGameInput) =>
-    httpClient.post('/api/games/join', payload)
-  )
+  useMutation((payload: JoinToGameInput) => {
+    return httpClient.post('/api/games/join', payload)
+  })

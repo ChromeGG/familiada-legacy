@@ -2,6 +2,7 @@ import {
   ClientToServerEvents,
   CreateGameDTO,
   Game,
+  Player,
   PlayerId,
   ServerToClientEvents,
   TeamId,
@@ -65,17 +66,18 @@ export class GamesService {
       name: playerName,
       teamId: <TeamId>playerGameId,
     })
+    console.log('~ supervisor', supervisor)
 
     if (playerTeam === 'RED') {
-      this.teamsService.joinToTeam(teamRed.entityId, supervisor.entityId)
+      this.teamsService.joinToTeam(teamRed.entityId, supervisor.id)
     } else {
-      this.teamsService.joinToTeam(teamBlue.entityId, supervisor.entityId)
+      this.teamsService.joinToTeam(teamBlue.entityId, supervisor.id)
     }
 
     newGame.name = gameName
     newGame.teamRedId = <TeamId>teamRed.entityId
     newGame.teamBlueId = <TeamId>teamBlue.entityId
-    newGame.supervisorId = <PlayerId>supervisor.entityId
+    newGame.supervisorId = <PlayerId>supervisor.id
     newGame.status = 'LOBBY'
 
     const gameId = await this.gamesRepository.save(newGame)
@@ -87,8 +89,7 @@ export class GamesService {
     const user = await this.playersService.create({ name, teamId })
 
     // TODO this should be normalized ({input1, input2} vs (input1, input2))
-    this.teamsService.joinToTeam(teamId, user.entityId)
-    // @ts-ignore
+    this.teamsService.joinToTeam(teamId, user.id)
     this.gamesGateway.server.emit('userJoined', user)
 
     return 1

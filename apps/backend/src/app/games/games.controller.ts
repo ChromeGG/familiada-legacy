@@ -19,7 +19,6 @@ export class GamesController {
   @Post('/join')
   @UsePipes(new JoiValidationPipe(joinToGameSchema))
   async joinToGame(@Body() joinToGameInput: JoinToGameDTO) {
-    // @ts-ignore
     return this.gamesService.joinToGame(joinToGameInput)
   }
 

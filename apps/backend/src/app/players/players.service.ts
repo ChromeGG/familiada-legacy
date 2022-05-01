@@ -1,6 +1,5 @@
-import { PlayerId } from '@familiada/shared-interfaces'
+import { Player, PlayerId, TeamId } from '@familiada/shared-interfaces'
 import { Inject, Injectable } from '@nestjs/common'
-import { Client } from 'redis-om'
 import { CreatePlayerDto } from './dto/create-player.dto'
 import { UpdatePlayerDto } from './dto/update-player.dto'
 import { PlayersRepository } from './players.repository'
@@ -11,8 +10,22 @@ export class PlayersService {
     @Inject(PlayersRepository) private playersRepository: PlayersRepository
   ) {}
 
-  async create({ name, teamId }: CreatePlayerDto) {
-    return await this.playersRepository.createAndSave({ name, teamId })
+  async create({ name, teamId }: CreatePlayerDto): Promise<Player> {
+    const { entityData, entityId } = await this.playersRepository.createAndSave(
+      {
+        name,
+        teamId,
+      }
+    )
+
+    const player: Player = {
+      id: <PlayerId>entityId,
+      // It return general type EntityData, but its string
+      name: entityData.name as string,
+      teamId: <TeamId>entityData.teamId,
+    }
+
+    return player
   }
 
   async findOne(id: number) {

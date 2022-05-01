@@ -16,8 +16,8 @@ export const useGetGame = (id: GameId) => {
 }
 
 export const useCreateGameMutation = () =>
-  useMutation(({ gameName, playerName, team }: CreateGameDTO) =>
-    httpClient.post('/api/games/create', { gameName, playerName, team })
+  useMutation(({ gameName, playerName, playerTeam }: CreateGameDTO) =>
+    httpClient.post('/api/games/create', { gameName, playerName, playerTeam })
   )
 
 export const useJoinToGameMutation = () =>

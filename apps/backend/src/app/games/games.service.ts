@@ -81,13 +81,10 @@ export class GamesService {
   }
 
   async joinToGame({ name, teamId }) {
-    console.log('~ { name, team }', { name, teamId })
-
     const user = await this.playersService.create({ name, teamId })
-    console.log('~ user', user)
 
     this.teamsService.joinToTeam(teamId, user.entityId)
-
+    // @ts-ignore
     this.gamesGateway.server.emit('userJoined', user)
 
     return 1

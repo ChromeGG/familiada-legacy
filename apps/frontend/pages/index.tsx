@@ -36,12 +36,12 @@ export function Index() {
   const createGame = useCreateGameMutation()
   const createGameHandler = async ({
     gameName,
-    team,
+    playerTeam,
     playerName,
   }: CreateGameDTO) => {
     await createGame.mutateAsync({
       gameName,
-      team,
+      playerTeam,
       playerName,
     })
 
@@ -51,11 +51,8 @@ export function Index() {
     //   `http://${window.location.hostname}:3333`
     // )
     // setSocket(newSocket)
-    // console.log('~ newSocket', newSocket)
-    // console.log('socket ID', newSocket.id)
     // setPlayer({ id: newSocket.id, name: playerName, team })
     // newSocket.on('userJoined', (sth) => {
-    //   console.log('userJoined', sth)
     //   // setPlayer((prevPlayers) => [...prevPlayers, sth])
     // })
 
@@ -63,7 +60,6 @@ export function Index() {
     // setUsers((prevPlayers) => [...prevPlayers, { name, team }])
 
     // newSocket.on('answer', (sth) => {
-    //   console.log('answer', sth)
     //   // setUsers((prevPlayers) => [...prevPlayers, sth])
     // })
   }
@@ -92,7 +88,7 @@ export function Index() {
             />
             <RadioButtonGroup
               label={t`team`}
-              name="team"
+              name="playerTeam"
               options={[
                 {
                   id: 'RED',

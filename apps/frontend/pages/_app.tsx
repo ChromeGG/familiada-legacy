@@ -33,7 +33,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
     setSocket(newSocket)
     // log socket connection
     newSocket.on('connect', () => {
-      console.log('Socket ID', newSocket.id)
+      // console.log('Socket ID', newSocket.id)
     })
 
     newSocket.on('userJoined', (user) => {

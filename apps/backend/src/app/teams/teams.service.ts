@@ -4,6 +4,7 @@ import { PlayersService } from '../players/players.service'
 import { CreateTeamDto } from './dto/create-team.dto'
 import { UpdateTeamDto } from './dto/update-team.dto'
 import { TeamsRepository } from './teams.repository'
+import { isEmpty } from 'ramda'
 
 @Injectable()
 export class TeamsService {
@@ -23,21 +24,25 @@ export class TeamsService {
       throw new NotFoundException(`Team with id ${id} not found`)
     }
 
-    console.log(team.entityData)
+    // @ts-ignore
     team.entityData.players = await this.playersService.findByIds(
       <PlayerId[]>team.entityData.playersIds
     )
     return team.entityData
   }
 
-  async joinToTeam(teamId: TeamId, playerId: PlayerId) {
+  async joinToTeam(teamId, playerId) {
+    console.log('joinToTeam', teamId, playerId)
     const team = await this.teamsRepository.fetch(teamId)
+    console.log('~ team', team)
 
-    if (!team) {
+    if (!team || isEmpty(team.entityData)) {
       throw new NotFoundException(`Team with id ${teamId} not found`)
     }
 
     // TODO TS error, but it's working
+    console.log('team.entityData', team.entityData)
+    // @ts-ignore
     team.entityData.playersIds.push(playerId)
     await this.teamsRepository.save(team)
   }

@@ -22,7 +22,10 @@ export const useCreateGameForm = () => {
       .max(20)
       .default('')
       .label(t('field.gameName')),
-    team: Joi.string().valid('RED', 'BLUE').required().label(t('field.team')),
+    playerTeam: Joi.string()
+      .valid('RED', 'BLUE')
+      .required()
+      .label(t('field.team')),
   })
 
   const defaultValues = extractDefaults<CreateGameDTO>(schema)

@@ -9,13 +9,3 @@ const schema = new Schema(Player, {
   name: { type: 'text' },
   teamId: { type: 'number' },
 })
-
-// (async function() {
-
-//   const redis = createClient('redis://localhost:6379')
-//   let client = await new Client().use(redis)
-
-//   await redis.set('foo', 'bar')
-//   let value = await client.execute(['GET', 'foo'])
-//   let albumRepository = client.fetchRepository(schema)
-// })()

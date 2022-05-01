@@ -35,6 +35,16 @@ Below are our core plugins:
 
 There are also many [community plugins](https://nx.dev/community) you could add.
 
+## Test
+
+To run test
+
+```bash
+npx nx test <project> --test-file <pattern>
+# e.x.
+npx nx test backend --test-file games.ser
+```
+
 ## Generate an application
 
 Run `npx nx g @nrwl/react:app my-app` to generate an application (like `Backend` or `Frontend`).

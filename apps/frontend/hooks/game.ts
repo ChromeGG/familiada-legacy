@@ -9,7 +9,6 @@ import { httpClient } from '../core/httpClient'
 export type ServerStateKeys = 'game'
 
 export const getGame = async (id: GameId) => {
-  console.log('~ GameId', id)
   const response = await httpClient.get(`/api/games/${id}`)
   return response.data
 }

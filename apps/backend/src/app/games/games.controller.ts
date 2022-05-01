@@ -24,7 +24,6 @@ export class GamesController {
 
   @Get(':id')
   async getGameById(@Param('id') id: string) {
-    console.log('~ id', id)
     return this.gamesService.findById(id)
   }
 }

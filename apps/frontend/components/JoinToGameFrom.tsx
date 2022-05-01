@@ -28,7 +28,9 @@ const JoinToGameFrom = ({ game }: Props) => {
 
   const joinToGameHandler = async ({ name, team }: JoinToGameInput) => {
     const teamId = team === 'RED' ? game.teamRedId : game.teamBlueId
+    console.time('joinToGame')
     await joinToGame.mutateAsync({ name, teamId })
+    console.timeEnd('joinToGame')
   }
 
   return (

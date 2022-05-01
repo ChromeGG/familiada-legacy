@@ -66,7 +66,6 @@ export class GamesService {
       name: playerName,
       teamId: <TeamId>playerGameId,
     })
-    console.log('~ supervisor', supervisor)
 
     if (playerTeam === 'RED') {
       this.teamsService.joinToTeam(teamRed.entityId, supervisor.id)

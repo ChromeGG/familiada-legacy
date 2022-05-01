@@ -1,5 +1,3 @@
-// TODO
-
 import { Opaque } from 'type-fest'
 import { Socket } from 'socket.io-client'
 

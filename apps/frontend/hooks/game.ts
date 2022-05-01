@@ -1,7 +1,10 @@
-import { CreateGameDTO, GameId } from '@familiada/shared-interfaces'
+import {
+  CreateGameDTO,
+  GameId,
+  JoinToGameDTO,
+} from '@familiada/shared-interfaces'
 import { useMutation, useQuery } from 'react-query'
 import { httpClient } from '../core/httpClient'
-import { JoinToGameInput } from '../validation/game'
 
 export type ServerStateKeys = 'game'
 
@@ -21,6 +24,6 @@ export const useCreateGameMutation = () =>
   )
 
 export const useJoinToGameMutation = () =>
-  useMutation((payload: JoinToGameInput) => {
+  useMutation((payload: JoinToGameDTO) => {
     return httpClient.post('/api/games/join', payload)
   })

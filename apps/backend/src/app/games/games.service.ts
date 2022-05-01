@@ -1,6 +1,7 @@
 import {
   ClientToServerEvents,
   CreateGameDTO,
+  Game,
   PlayerId,
   ServerToClientEvents,
   TeamId,
@@ -77,7 +78,9 @@ export class GamesService {
     newGame.supervisorId = <PlayerId>supervisor.entityId
     newGame.status = 'LOBBY'
 
-    return this.gamesRepository.save(newGame)
+    const gameId = await this.gamesRepository.save(newGame)
+    const { entityData } = await this.gamesRepository.fetch(gameId)
+    return entityData
   }
 
   async joinToGame({ name, teamId }) {

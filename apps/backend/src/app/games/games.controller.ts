@@ -1,8 +1,8 @@
-import { CreateGameDTO } from '@familiada/shared-interfaces'
+import { CreateGameDTO, JoinToGameDTO } from '@familiada/shared-interfaces'
 import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common'
 import { JoiValidationPipe } from '../validation.pipe'
 import { createGameSchema } from './dto/create-game.dto'
-import { JoinToGameDto, joinToGameSchema } from './dto/join-to-game.dto'
+import { joinToGameSchema } from './dto/join-to-game.dto'
 
 import { GamesService } from './games.service'
 
@@ -12,19 +12,19 @@ export class GamesController {
 
   @Post('/create')
   @UsePipes(new JoiValidationPipe(createGameSchema))
-  createGame(@Body() game: CreateGameDTO) {
+  async createGame(@Body() game: CreateGameDTO) {
     return this.gamesService.create(game)
   }
 
   @Post('/join')
   @UsePipes(new JoiValidationPipe(joinToGameSchema))
-  joinToGame(@Body() joinToGameInput: JoinToGameDto) {
+  async joinToGame(@Body() joinToGameInput: JoinToGameDTO) {
     // @ts-ignore
     return this.gamesService.joinToGame(joinToGameInput)
   }
 
   @Get(':id')
-  getGameById(@Param('id') id: string) {
+  async getGameById(@Param('id') id: string) {
     console.log('~ id', id)
     return this.gamesService.findById(id)
   }

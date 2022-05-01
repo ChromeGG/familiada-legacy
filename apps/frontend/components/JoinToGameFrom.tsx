@@ -27,8 +27,8 @@ const JoinToGameFrom = ({ game }: Props) => {
   const joinToGame = useJoinToGameMutation()
 
   const joinToGameHandler = async ({ name, team }: JoinToGameInput) => {
-    const teamId = team === 'red' ? game.teamRedId : game.teamBlueId
-    const asd = await joinToGame.mutateAsync({ name, teamId })
+    const teamId = team === 'RED' ? game.teamRedId : game.teamBlueId
+    await joinToGame.mutateAsync({ name, teamId })
   }
 
   return (

@@ -32,7 +32,6 @@ export const useCreateGameForm = () => {
 
   return useForm<CreateGameDTO>({
     defaultValues,
-    // @ts-ignore
     resolver: joiResolver(schema),
   })
 }

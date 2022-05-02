@@ -68,9 +68,15 @@ export class GamesService {
     })
 
     if (playerTeam === 'RED') {
-      this.teamsService.joinToTeam(teamRed.entityId, supervisor.id)
+      this.teamsService.joinToTeam({
+        teamId: <TeamId>teamRed.entityId,
+        playerId: supervisor.id,
+      })
     } else {
-      this.teamsService.joinToTeam(teamBlue.entityId, supervisor.id)
+      this.teamsService.joinToTeam({
+        teamId: <TeamId>teamBlue.entityId,
+        playerId: supervisor.id,
+      })
     }
 
     newGame.name = gameName
@@ -87,8 +93,7 @@ export class GamesService {
   async joinToGame({ name, teamId }) {
     const user = await this.playersService.create({ name, teamId })
 
-    // TODO this should be normalized ({input1, input2} vs (input1, input2))
-    this.teamsService.joinToTeam(teamId, user.id)
+    this.teamsService.joinToTeam({ teamId, playerId: user.id })
     this.gamesGateway.server.emit('userJoined', user)
 
     return 1

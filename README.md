@@ -73,6 +73,15 @@ Run `npx nx g @nrwl/react:component my-component --project=my-app` to generate a
 
 Run `npx nx build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
+## Running type-check
+
+```bash
+npx tsc -p apps/<appName>/tsconfig.json --noEmit --incremental
+# e.g.
+# npx tsc -p apps/frontend/tsconfig.json --noEmit --incremental
+
+```
+
 ## Running unit tests
 
 Run `npx nx test my-app` to execute the unit tests via [Jest](https://jestjs.io).

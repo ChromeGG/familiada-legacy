@@ -28,10 +28,17 @@ export class TeamsService {
     team.entityData.players = await this.playersService.findByIds(
       <PlayerId[]>team.entityData.playersIds
     )
+
     return team.entityData
   }
 
-  async joinToTeam(teamId, playerId) {
+  async joinToTeam({
+    teamId,
+    playerId,
+  }: {
+    teamId: TeamId
+    playerId: PlayerId
+  }) {
     const team = await this.teamsRepository.fetch(teamId)
 
     if (!team || isEmpty(team.entityData)) {

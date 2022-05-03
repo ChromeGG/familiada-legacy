@@ -22,8 +22,8 @@ export class GamesController {
     return this.gamesService.joinToGame(joinToGameInput)
   }
 
-  @Get(':id')
-  async getGameById(@Param('id') id: string) {
-    return this.gamesService.findById(id)
+  @Get(':name')
+  async getGameById(@Param('name') name: string) {
+    return this.gamesService.findByName(name)
   }
 }

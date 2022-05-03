@@ -1,13 +1,20 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { Client, Entity, Schema } from 'redis-om'
 import { JsonRepository } from 'redis-om/dist/repository/repository'
-import { Game as GameI, PlayerId, TeamId } from '@familiada/shared-interfaces'
+import {
+  Game as GameI,
+  GameId,
+  PlayerId,
+  RoundNumber,
+  TeamId,
+} from '@familiada/shared-interfaces'
 
+// TODO this should be [NonDiscriminatedUnion](https://github.com/sindresorhus/type-fest/issues/386)
 interface Game {
-  id: string
-  actualRound: number
-  answeringUserId: string
-  canHitAnswer: [string, string]
+  id: GameId
+  actualRound: RoundNumber
+  answeringUserId: PlayerId
+  canHitAnswer: [PlayerId, PlayerId]
   name: string
   status: 'LOBBY' | 'RUNNING' | 'FINISHED'
   teamRedId: TeamId
@@ -33,9 +40,4 @@ export class GamesRepository extends JsonRepository<Game> {
   constructor(@Inject('STORAGE_CONNECTION') client: Client) {
     super(schema, client)
   }
-
-  // protected async writeEntity(key: string, data: EntityData): Promise<void> {
-  //   const { id } = data
-  //   await this.client.jsonset(`Game:${id}`, data)
-  // }
 }

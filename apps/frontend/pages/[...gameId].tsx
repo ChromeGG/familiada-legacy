@@ -14,6 +14,7 @@ import { dehydrate } from 'react-query'
 import { checkError } from '../core/errorHandler'
 import { getTeam, useGetTeam } from '../hooks/team'
 import JoinToGameFrom from '../components/JoinToGameFrom'
+import { getMe } from '../hooks/player'
 
 interface Props {
   game: Game

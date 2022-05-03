@@ -1,14 +1,14 @@
-import { CreateGameDTO, Player } from '@familiada/shared-interfaces'
-import { Body, Controller, Get, Param, Post } from '@nestjs/common'
+import { Player, PlayerId } from '@familiada/shared-interfaces'
+import { Controller, Get, Param } from '@nestjs/common'
 
 import { PlayersService } from './players.service'
 
 @Controller('/players')
 export class PlayerController {
-  constructor(private readonly gamesService: PlayersService) {}
+  constructor(private readonly playersService: PlayersService) {}
 
-  // @Post('/create')
-  // create(@Body() player: CreateUserDTO) {
-  //   return this.gamesService.create(player)
-  // }
+  @Get(':id')
+  async get(@Param('id') id: PlayerId): Promise<Player> {
+    return this.playersService.findById(id)
+  }
 }

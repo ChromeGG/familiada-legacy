@@ -31,16 +31,15 @@ export class GamesService {
     gameName,
     playerName,
     playerTeam,
-  }: CreateGameDTO): Promise<any> {
+  }: CreateGameDTO): Promise<Game> {
     await this.gamesRepository.createIndex()
-    const game = await this.gamesRepository
+    const existingGame = await this.gamesRepository
       .search()
       .where('name')
       .equals(gameName)
       .return.first()
-    await this.gamesRepository.dropIndex()
 
-    if (game) {
+    if (existingGame) {
       throw new ConflictException('Game already exists')
     }
 
@@ -85,7 +84,17 @@ export class GamesService {
 
     const gameId = await this.gamesRepository.save(newGame)
     const { entityData } = await this.gamesRepository.fetch(gameId)
-    return entityData
+
+    const game: Game = {
+      id: <GameId>gameId,
+      name: entityData.name as string,
+      status: 'LOBBY',
+      supervisorId: <PlayerId>entityData.supervisorId,
+      teamRedId: <TeamId>entityData.teamRedId,
+      teamBlueId: <TeamId>entityData.teamBlueId,
+    }
+
+    return game
   }
 
   async joinToGame({ name, teamId }): Promise<Player> {
@@ -102,17 +111,16 @@ export class GamesService {
     return player
   }
 
-  async findById(id: string): Promise<Game> {
+  async findByName(name: string): Promise<Game> {
     await this.gamesRepository.createIndex()
     const entity = await this.gamesRepository
       .search()
       .where('name')
-      .equals(id)
+      .equals(name)
       .return.first()
-    await this.gamesRepository.dropIndex()
 
     if (!entity) {
-      throw new NotFoundException(`Game with id ${id} not found`)
+      throw new NotFoundException(`Game with name ${name} not found`)
     }
 
     const game: Game = {

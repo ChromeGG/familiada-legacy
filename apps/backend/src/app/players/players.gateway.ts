@@ -11,18 +11,18 @@ import { UpdatePlayerDto } from './dto/update-player.dto'
 export class PlayersGateway {
   constructor(private readonly playerService: PlayersService) {}
 
-  @SubscribeMessage('createPlayer')
-  create(@MessageBody() createPlayerDto: CreatePlayerDto) {
-    return this.playerService.create(createPlayerDto)
-  }
+  // @SubscribeMessage('createPlayer')
+  // create(@MessageBody() createPlayerDto: CreatePlayerDto) {
+  //   return this.playerService.create(createPlayerDto)
+  // }
 
-  @SubscribeMessage('findOnePlayer')
-  findOne(@MessageBody() id: number) {
-    return this.playerService.findOne(id)
-  }
+  // @SubscribeMessage('findOnePlayer')
+  // findOne(@MessageBody() id: number) {
+  //   return this.playerService.findById(id)
+  // }
 
-  @SubscribeMessage('updatePlayer')
-  update(@MessageBody() updatePlayerDto: UpdatePlayerDto) {
-    return this.playerService.update(updatePlayerDto.id, updatePlayerDto)
-  }
+  // @SubscribeMessage('updatePlayer')
+  // update(@MessageBody() updatePlayerDto: UpdatePlayerDto) {
+  //   return this.playerService.update(updatePlayerDto.id, updatePlayerDto)
+  // }
 }

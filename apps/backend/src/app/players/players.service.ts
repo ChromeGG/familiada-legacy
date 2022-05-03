@@ -1,7 +1,6 @@
 import { Player, PlayerId, TeamId } from '@familiada/shared-interfaces'
 import { Inject, Injectable } from '@nestjs/common'
 import { CreatePlayerDto } from './dto/create-player.dto'
-import { UpdatePlayerDto } from './dto/update-player.dto'
 import { PlayersRepository } from './players.repository'
 
 @Injectable()
@@ -28,9 +27,16 @@ export class PlayersService {
     return player
   }
 
-  async findOne(id: number) {
-    // await this.db.fetchRepository
-    return `This action returns a #${id} player`
+  async findById(id: PlayerId): Promise<Player> {
+    const entity = await this.playersRepository.fetch(id)
+
+    const player: Player = {
+      id,
+      name: entity.entityData.name as string,
+      teamId: <TeamId>entity.entityData.teamId,
+    }
+
+    return player
   }
 
   async findByIds(ids: PlayerId[]): Promise<Player[]> {
@@ -40,7 +46,6 @@ export class PlayersService {
 
     await this.playersRepository.createIndex()
     const entities = await this.playersRepository.search().return.all()
-    await this.playersRepository.dropIndex()
 
     const filteredEntities = ids.map((id) =>
       entities.find((player) => player.entityId === id)
@@ -56,9 +61,5 @@ export class PlayersService {
     })
 
     return players
-  }
-
-  async update(id: number, updatePlayerDto: UpdatePlayerDto) {
-    return `This action updates a #${id} player`
   }
 }

@@ -1,13 +1,7 @@
 import { Player } from '@familiada/shared-interfaces'
-import { createContext, Dispatch, SetStateAction, useContext } from 'react'
+import { useLocalStorageValue } from '@react-hookz/web'
 
-interface IMeContext {
-  me: Player | null
-  setMe: Dispatch<SetStateAction<Player>>
-}
-
-export const MeContext = createContext<IMeContext>({
-  me: null,
-  setMe: () => '',
-})
-export const useMe = () => useContext<IMeContext>(MeContext)
+export const useMe = () =>
+  useLocalStorageValue<Player | undefined>('me', undefined, {
+    initializeWithStorageValue: false,
+  })

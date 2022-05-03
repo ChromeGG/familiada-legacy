@@ -3,7 +3,6 @@ import Board from '../components/Board'
 import PlayersList from '../components/PlayersList'
 import Question from '../components/Question'
 import AnswerField from '../components/AnswerField'
-import { Team } from '../interfaces'
 import useTranslation from 'next-translate/useTranslation'
 import { useToggle } from '@react-hookz/web'
 import { GetServerSideProps } from 'next'
@@ -15,12 +14,14 @@ import { checkError } from '../core/errorHandler'
 import { getTeam, useGetTeam } from '../api/team'
 import JoinToGameFrom from '../components/JoinToGameFrom'
 import { useMe } from '../contexts/Me'
+import { NextSeo } from 'next-seo'
 
 interface Props {
   game: Game
 }
 export function GameView({ game }: Props) {
   const { t } = useTranslation()
+  const [me] = useMe()
 
   const { data: teamRed } = useGetTeam(game.teamRedId)
   const { data: teamBlue } = useGetTeam(game.teamBlueId)
@@ -30,13 +31,9 @@ export function GameView({ game }: Props) {
     toggleIsAnswering()
   }
 
-  const { me } = useMe()
-
-  // const me = useMe()
-  console.log('~ me', me)
-
   return (
     <Container maxWidth="xl" disableGutters>
+      <NextSeo title={'gameIDhere'} />
       <Grid container spacing={2} p={1}>
         <Grid item xs={12}>
           <Board />
@@ -62,7 +59,6 @@ export function GameView({ game }: Props) {
           </Grid>
         </Grid>
       </Grid>
-      {/* ! NEXT: To się coś nie odświeża */}
       {!me && (
         <Container sx={{ display: 'flex', justifyContent: 'center' }}>
           <JoinToGameFrom game={game} />

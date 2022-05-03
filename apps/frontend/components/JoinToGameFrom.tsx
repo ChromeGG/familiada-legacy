@@ -26,7 +26,7 @@ const JoinToGameFrom = ({ game }: Props) => {
   const form = useJoinToGameForm()
   const joinToGame = useJoinToGameMutation()
   const client = useQueryClient()
-  const { setMe } = useMe()
+  const [_, setMe] = useMe()
 
   const joinToGameHandler = async ({ name, team }: JoinToGameInput) => {
     const teamId = team === 'RED' ? game.teamRedId : game.teamBlueId

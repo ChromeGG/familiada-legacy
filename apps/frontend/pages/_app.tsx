@@ -1,14 +1,11 @@
 import { AppProps } from 'next/app'
-import Head from 'next/head'
 import { theme } from '../configuration/theme'
 import { ThemeProvider } from '@mui/material/styles'
 import { DefaultSeo } from 'next-seo'
 import { CssBaseline } from '@mui/material'
-import { MeContext } from '../contexts/Me'
 import { useEffect, useState } from 'react'
 import {
   ClientToServerEvents,
-  Player,
   ServerToClientEvents,
   Team,
 } from '@familiada/shared-interfaces'
@@ -23,7 +20,6 @@ const { apiUrl } = config
 
 function CustomApp({ Component, pageProps }: AppProps) {
   const [client] = useState(() => queryClient)
-  const [player, setPlayer] = useState<Player>(null)
   const [socket, setSocket] =
     useState<Socket<ServerToClientEvents, ClientToServerEvents>>(null)
 
@@ -70,12 +66,10 @@ function CustomApp({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={client}>
         <Hydrate state={pageProps.dehydratedState}>
           <SocketContext.Provider value={{ socket, setSocket }}>
-            <MeContext.Provider value={{ me: player, setMe: setPlayer }}>
-              <ThemeProvider theme={theme}>
-                <Component {...pageProps} />
-                <ReactQueryDevtools />
-              </ThemeProvider>
-            </MeContext.Provider>
+            <ThemeProvider theme={theme}>
+              <Component {...pageProps} />
+              <ReactQueryDevtools />
+            </ThemeProvider>
           </SocketContext.Provider>
         </Hydrate>
       </QueryClientProvider>

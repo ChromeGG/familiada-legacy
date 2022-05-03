@@ -1,14 +1,13 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import {
   Button,
   Card,
   CardHeader,
   CardContent,
   CardActions,
-  Grid,
   Container,
 } from '@mui/material'
-import io, { Socket } from 'socket.io-client'
+import { Socket } from 'socket.io-client'
 import {
   ClientToServerEvents,
   ServerToClientEvents,
@@ -27,16 +26,17 @@ import { useRouter } from 'next/router'
 import { useCreateGameMutation } from '../api/game'
 import { getPlayer } from '../api/player'
 import { useQueryClient } from 'react-query'
+import { NextSeo } from 'next-seo'
 
 export function Index() {
   const { t } = useTranslation()
   const form = useCreateGameForm()
-  const { me, setMe } = useMe()
   const [socket, setSocket] =
     useState<Socket<ServerToClientEvents, ClientToServerEvents>>(null)
   const router = useRouter()
   const createGame = useCreateGameMutation()
   const client = useQueryClient()
+  const [_, setMe2] = useMe()
 
   const useCreateGameHandler = async ({
     gameName,
@@ -50,7 +50,8 @@ export function Index() {
     })
 
     const me = await client.fetchQuery('me', () => getPlayer(game.supervisorId))
-    setMe(me)
+    // setMe(me)
+    setMe2(me)
 
     router.push(`/${gameName}`)
 
@@ -73,6 +74,7 @@ export function Index() {
 
   return (
     <Container maxWidth="sm">
+      <NextSeo title={t`create_game`} />
       <FormContainer
         formContext={form}
         handleSubmit={form.handleSubmit(useCreateGameHandler)}

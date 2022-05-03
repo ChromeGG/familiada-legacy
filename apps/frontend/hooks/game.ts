@@ -3,6 +3,7 @@ import {
   Game,
   GameId,
   JoinToGameDTO,
+  Player,
 } from '@familiada/shared-interfaces'
 import { useMutation, useQuery } from 'react-query'
 import { httpClient } from '../core/httpClient'
@@ -29,6 +30,9 @@ export const useCreateGameMutation = () =>
   })
 
 export const useJoinToGameMutation = () =>
-  useMutation((payload: JoinToGameDTO) => {
-    return httpClient.post('/api/games/join', payload)
+  useMutation<Player, unknown, JoinToGameDTO>(async (payload) => {
+    {
+      const { data } = await httpClient.post<Player>('/api/games/join', payload)
+      return data
+    }
   })

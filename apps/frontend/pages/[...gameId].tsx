@@ -14,7 +14,7 @@ import { dehydrate } from 'react-query'
 import { checkError } from '../core/errorHandler'
 import { getTeam, useGetTeam } from '../hooks/team'
 import JoinToGameFrom from '../components/JoinToGameFrom'
-import { getMe } from '../hooks/player'
+import { getMe, useMe } from '../hooks/player'
 
 interface Props {
   game: Game
@@ -29,6 +29,8 @@ export function GameView({ game }: Props) {
   const hitAnswerButton = () => {
     toggleIsAnswering()
   }
+
+  const me = useMe()
 
   return (
     <Container maxWidth="xl" disableGutters>
@@ -57,9 +59,11 @@ export function GameView({ game }: Props) {
           </Grid>
         </Grid>
       </Grid>
-      <Container sx={{ display: 'flex', justifyContent: 'center' }}>
-        <JoinToGameFrom game={game} />
-      </Container>
+      {!me && (
+        <Container sx={{ display: 'flex', justifyContent: 'center' }}>
+          <JoinToGameFrom game={game} />
+        </Container>
+      )}
     </Container>
   )
 }

@@ -1,4 +1,4 @@
-import { PlayerId, TeamColor, TeamId } from '../lib/interfaces'
+import { TeamColor, TeamId } from '../lib/interfaces'
 
 export interface CreateGameDTO {
   playerName: string
@@ -8,5 +8,5 @@ export interface CreateGameDTO {
 
 export interface JoinToGameDTO {
   teamId: TeamId
-  name: PlayerId
+  name: string
 }

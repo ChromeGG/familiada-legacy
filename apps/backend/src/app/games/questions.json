@@ -1,0 +1,70 @@
+[
+  {
+    "id": 1,
+    "text": "Więcej niż jedno zwierze to...",
+    "answers": [
+      { "position": 1, "label": "Lama", "points": 23 },
+      { "position": 2, "label": "Owca", "points": 22 },
+      { "position": 3, "label": "Stado", "points": 17 },
+      { "position": 4, "label": "Wataha", "points": 15 },
+      { "position": 5, "label": "Ławica", "points": 10 },
+      { "position": 6, "label": "Sfora", "points": 8 }
+    ]
+  },
+  {
+    "id": 2,
+    "text": "Jaki przedmiot szkolny najmniej przydaje się w życiu?",
+    "answers": [
+      { "position": 1, "label": "Kanapka", "points": 35 },
+      { "position": 2, "label": "WF", "points": 18 },
+      { "position": 3, "label": "Muzyka", "points": 13 },
+      { "position": 4, "label": "Plastyka", "points": 12 },
+      { "position": 5, "label": "Technika", "points": 9 },
+      { "position": 6, "label": "Chemia", "points": 7 }
+    ]
+  },
+  {
+    "id": 3,
+    "text": "Słowo zaczynające się na literę 'Ć' ...",
+    "answers": [
+      { "position": 1, "label": "Ćma", "points": 28 },
+      { "position": 2, "label": "Ćwiczenie", "points": 26 },
+      { "position": 3, "label": "Ćwikła", "points": 20 },
+      { "position": 4, "label": "Ćwiek", "points": 12 },
+      { "position": 5, "label": "Ćwiartka", "points": 8 }
+    ]
+  },
+  {
+    "id": 4,
+    "text": "Słynny polski Adam ...",
+    "answers": [
+      { "position": 1, "label": "Małysz", "points": 35 },
+      { "position": 2, "label": "Mickiewicz", "points": 30 },
+      { "position": 3, "label": "Nawałka", "points": 25 },
+      { "position": 4, "label": "Tkaczyk", "points": 1 }
+    ]
+  },
+  {
+    "id": 5,
+    "text": "Grecka wyspa ...",
+    "answers": [
+      { "position": 1, "label": "Kreta", "points": 23 },
+      { "position": 2, "label": "Rodos", "points": 22 },
+      { "position": 3, "label": "Korfu", "points": 16 },
+      { "position": 4, "label": "Kos", "points": 13 },
+      { "position": 5, "label": "Santorini", "points": 11 },
+      { "position": 6, "label": "Zakintos", "points": 9 }
+    ]
+  },
+  {
+    "id": 6,
+    "text": "Co zakładamy niemowlęciu?",
+    "answers": [
+      { "position": 1, "label": "Śpioszki", "points": 30 },
+      { "position": 2, "label": "Pieluszki", "points": 25 },
+      { "position": 3, "label": "Czapeczkę", "points": 18 },
+      { "position": 4, "label": "Koszulkę", "points": 15 },
+      { "position": 4, "label": "Pajacyk", "points": 8 }
+    ]
+  }
+]

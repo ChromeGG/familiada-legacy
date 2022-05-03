@@ -1,9 +1,9 @@
-import { TeamId } from '@familiada/shared-interfaces'
+import { Team, TeamId } from '@familiada/shared-interfaces'
 import { useQuery } from 'react-query'
 import { httpClient } from '../core/httpClient'
 
 export const getTeam = async (id: TeamId) => {
-  const response = await httpClient.get(`/api/teams/${id}`)
+  const response = await httpClient.get<Team>(`/api/teams/${id}`)
   return response.data
 }
 

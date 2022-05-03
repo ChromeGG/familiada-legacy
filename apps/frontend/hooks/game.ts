@@ -19,9 +19,14 @@ export const useGetGame = (id: GameId) => {
 }
 
 export const useCreateGameMutation = () =>
-  useMutation(({ gameName, playerName, playerTeam }: CreateGameDTO) =>
-    httpClient.post('/api/games/create', { gameName, playerName, playerTeam })
-  )
+  useMutation(async ({ gameName, playerName, playerTeam }: CreateGameDTO) => {
+    const { data } = await httpClient.post<Game>('/api/games/create', {
+      gameName,
+      playerName,
+      playerTeam,
+    })
+    return data
+  })
 
 export const useJoinToGameMutation = () =>
   useMutation((payload: JoinToGameDTO) => {

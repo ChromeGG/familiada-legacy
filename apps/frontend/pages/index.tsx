@@ -25,6 +25,8 @@ import { useCreateGameForm } from '../validation/game'
 import { usePlayerContext } from '../contexts/Player'
 import { useRouter } from 'next/router'
 import { useCreateGameMutation } from '../hooks/game'
+import { getMe, useMe } from '../hooks/player'
+import { useQueryClient } from 'react-query'
 
 export function Index() {
   const { t } = useTranslation()
@@ -34,16 +36,20 @@ export function Index() {
     useState<Socket<ServerToClientEvents, ClientToServerEvents>>(null)
   const router = useRouter()
   const createGame = useCreateGameMutation()
-  const createGameHandler = async ({
+  const client = useQueryClient()
+
+  const useCreateGameHandler = async ({
     gameName,
     playerTeam,
     playerName,
   }: CreateGameDTO) => {
-    await createGame.mutateAsync({
+    const game = await createGame.mutateAsync({
       gameName,
       playerTeam,
       playerName,
     })
+
+    await client.fetchQuery('me', () => getMe(game.supervisorId))
 
     router.push(`/${gameName}`)
 
@@ -68,7 +74,7 @@ export function Index() {
     <Container maxWidth="sm">
       <FormContainer
         formContext={form}
-        handleSubmit={form.handleSubmit(createGameHandler)}
+        handleSubmit={form.handleSubmit(useCreateGameHandler)}
       >
         <Card>
           <CardHeader title="Familiada" />

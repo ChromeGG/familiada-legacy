@@ -7,8 +7,8 @@ import {
   ListItemText,
 } from '@mui/material'
 import useTranslation from 'next-translate/useTranslation'
-import { useGetGame } from '../hooks/game'
-import { useMe } from '../hooks/player'
+import { useGetGame } from '../api/game'
+import { useMe } from '../api/player'
 import { Team } from '../interfaces'
 
 interface Props {

@@ -8,13 +8,13 @@ import useTranslation from 'next-translate/useTranslation'
 import { useToggle } from '@react-hookz/web'
 import { GetServerSideProps } from 'next'
 import { queryClient } from '../core/httpClient'
-import { getGame } from '../hooks/game'
+import { getGame } from '../api/game'
 import { Game, GameId } from '@familiada/shared-interfaces'
 import { dehydrate } from 'react-query'
 import { checkError } from '../core/errorHandler'
-import { getTeam, useGetTeam } from '../hooks/team'
+import { getTeam, useGetTeam } from '../api/team'
 import JoinToGameFrom from '../components/JoinToGameFrom'
-import { getMe, useMe } from '../hooks/player'
+import { useMe } from '../contexts/Me'
 
 interface Props {
   game: Game
@@ -30,7 +30,10 @@ export function GameView({ game }: Props) {
     toggleIsAnswering()
   }
 
-  const me = useMe()
+  const { me } = useMe()
+
+  // const me = useMe()
+  console.log('~ me', me)
 
   return (
     <Container maxWidth="xl" disableGutters>
@@ -59,6 +62,7 @@ export function GameView({ game }: Props) {
           </Grid>
         </Grid>
       </Grid>
+      {/* ! NEXT: To się coś nie odświeża */}
       {!me && (
         <Container sx={{ display: 'flex', justifyContent: 'center' }}>
           <JoinToGameFrom game={game} />

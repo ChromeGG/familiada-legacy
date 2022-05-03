@@ -22,16 +22,16 @@ import {
 } from 'react-hook-form-mui'
 import useTranslation from 'next-translate/useTranslation'
 import { useCreateGameForm } from '../validation/game'
-import { usePlayerContext } from '../contexts/Player'
+import { useMe } from '../contexts/Me'
 import { useRouter } from 'next/router'
-import { useCreateGameMutation } from '../hooks/game'
-import { getMe, useMe } from '../hooks/player'
+import { useCreateGameMutation } from '../api/game'
+import { getPlayer } from '../api/player'
 import { useQueryClient } from 'react-query'
 
 export function Index() {
   const { t } = useTranslation()
   const form = useCreateGameForm()
-  const { player, setPlayer } = usePlayerContext()
+  const { me, setMe } = useMe()
   const [socket, setSocket] =
     useState<Socket<ServerToClientEvents, ClientToServerEvents>>(null)
   const router = useRouter()
@@ -49,7 +49,8 @@ export function Index() {
       playerName,
     })
 
-    await client.fetchQuery('me', () => getMe(game.supervisorId))
+    const me = await client.fetchQuery('me', () => getPlayer(game.supervisorId))
+    setMe(me)
 
     router.push(`/${gameName}`)
 

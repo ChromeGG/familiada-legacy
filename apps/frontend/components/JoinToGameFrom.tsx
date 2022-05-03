@@ -1,4 +1,4 @@
-import { Game, GameId } from '@familiada/shared-interfaces'
+import { Game } from '@familiada/shared-interfaces'
 import {
   Button,
   Card,
@@ -7,16 +7,14 @@ import {
   CardHeader,
 } from '@mui/material'
 import useTranslation from 'next-translate/useTranslation'
-import { useRouter } from 'next/router'
-import React from 'react'
 import {
   FormContainer,
   RadioButtonGroup,
   TextFieldElement,
 } from 'react-hook-form-mui'
 import { useQueryClient } from 'react-query'
-import { useJoinToGameMutation } from '../hooks/game'
-import { getMe } from '../hooks/player'
+import { useMe } from '../contexts/Me'
+import { useJoinToGameMutation } from '../api/game'
 import { JoinToGameInput, useJoinToGameForm } from '../validation/game'
 
 interface Props {
@@ -28,11 +26,13 @@ const JoinToGameFrom = ({ game }: Props) => {
   const form = useJoinToGameForm()
   const joinToGame = useJoinToGameMutation()
   const client = useQueryClient()
+  const { setMe } = useMe()
 
   const joinToGameHandler = async ({ name, team }: JoinToGameInput) => {
     const teamId = team === 'RED' ? game.teamRedId : game.teamBlueId
     const me = await joinToGame.mutateAsync({ name, teamId })
     client.setQueryData('me', me)
+    setMe(me)
   }
 
   return (

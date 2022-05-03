@@ -4,7 +4,7 @@ import { theme } from '../configuration/theme'
 import { ThemeProvider } from '@mui/material/styles'
 import { DefaultSeo } from 'next-seo'
 import { CssBaseline } from '@mui/material'
-import { PlayerContext } from '../contexts/Player'
+import { MeContext } from '../contexts/Me'
 import { useEffect, useState } from 'react'
 import {
   ClientToServerEvents,
@@ -70,12 +70,12 @@ function CustomApp({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={client}>
         <Hydrate state={pageProps.dehydratedState}>
           <SocketContext.Provider value={{ socket, setSocket }}>
-            <PlayerContext.Provider value={{ player, setPlayer }}>
+            <MeContext.Provider value={{ me: player, setMe: setPlayer }}>
               <ThemeProvider theme={theme}>
                 <Component {...pageProps} />
                 <ReactQueryDevtools />
               </ThemeProvider>
-            </PlayerContext.Provider>
+            </MeContext.Provider>
           </SocketContext.Provider>
         </Hydrate>
       </QueryClientProvider>

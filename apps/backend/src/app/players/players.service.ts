@@ -20,7 +20,7 @@ export class PlayersService {
 
     const player: Player = {
       id: <PlayerId>entityId,
-      // It return general type EntityData, but its string
+      // It return general type EntityData, but it's string
       name: entityData.name as string,
       teamId: <TeamId>entityData.teamId,
     }
@@ -33,20 +33,29 @@ export class PlayersService {
     return `This action returns a #${id} player`
   }
 
-  async findByIds(ids: PlayerId[]) {
+  async findByIds(ids: PlayerId[]): Promise<Player[]> {
     if (!ids.length) {
       return []
     }
 
     await this.playersRepository.createIndex()
-    const players = await this.playersRepository.search().return.all()
+    const entities = await this.playersRepository.search().return.all()
     await this.playersRepository.dropIndex()
 
-    const results = ids.map(
-      (id) => players.find((player) => player.entityId === id).entityData
+    const filteredEntities = ids.map((id) =>
+      entities.find((player) => player.entityId === id)
     )
 
-    return results
+    const players: Player[] = filteredEntities.map((entity) => {
+      const player: Player = {
+        id: <PlayerId>entity.entityId,
+        name: entity.entityData.name as string,
+        teamId: <TeamId>entity.entityData.teamId,
+      }
+      return player
+    })
+
+    return players
   }
 
   async update(id: number, updatePlayerDto: UpdatePlayerDto) {

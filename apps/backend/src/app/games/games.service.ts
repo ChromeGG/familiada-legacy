@@ -1,10 +1,10 @@
 import {
-  ClientToServerEvents,
   CreateGameDTO,
   Game,
+  GameId,
   Player,
   PlayerId,
-  ServerToClientEvents,
+  RoundNumber,
   TeamId,
 } from '@familiada/shared-interfaces'
 import {
@@ -13,8 +13,6 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common'
-import { WebSocketServer } from '@nestjs/websockets'
-import { Server } from 'socket.io'
 import { PlayersService } from '../players/players.service'
 import { TeamsService } from '../teams/teams.service'
 import { GamesGateway } from './games.gateway'
@@ -90,28 +88,45 @@ export class GamesService {
     return entityData
   }
 
-  async joinToGame({ name, teamId }) {
-    const user = await this.playersService.create({ name, teamId })
+  async joinToGame({ name, teamId }): Promise<Player> {
+    // check if team exists
+    await this.teamsService.findById(teamId)
 
-    this.teamsService.joinToTeam({ teamId, playerId: user.id })
-    this.gamesGateway.server.emit('userJoined', user)
+    // TODO add validation if name isn't unique in game
 
-    return 1
+    const player = await this.playersService.create({ name, teamId })
+
+    this.teamsService.joinToTeam({ teamId, playerId: player.id })
+    this.gamesGateway.server.emit('playerJoined', player)
+
+    return player
   }
 
-  async findById(id: string): Promise<any> {
+  async findById(id: string): Promise<Game> {
     await this.gamesRepository.createIndex()
-    const game = await this.gamesRepository
+    const entity = await this.gamesRepository
       .search()
       .where('name')
       .equals(id)
       .return.first()
     await this.gamesRepository.dropIndex()
 
-    if (!game) {
+    if (!entity) {
       throw new NotFoundException(`Game with id ${id} not found`)
     }
 
-    return game.entityData
+    const game: Game = {
+      id: <GameId>entity.entityId,
+      name: entity.name,
+      supervisorId: entity.supervisorId,
+      teamRedId: entity.teamRedId,
+      teamBlueId: entity.teamBlueId,
+      status: entity.status,
+      actualRound: <RoundNumber>entity.actualRound,
+      answeringUserId: <PlayerId>entity.answeringUserId,
+      canHitAnswer: <[PlayerId, PlayerId]>entity.canHitAnswer,
+    }
+
+    return game
   }
 }

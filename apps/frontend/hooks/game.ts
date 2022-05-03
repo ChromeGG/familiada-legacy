@@ -1,5 +1,6 @@
 import {
   CreateGameDTO,
+  Game,
   GameId,
   JoinToGameDTO,
 } from '@familiada/shared-interfaces'
@@ -9,7 +10,7 @@ import { httpClient } from '../core/httpClient'
 export type ServerStateKeys = 'game'
 
 export const getGame = async (id: GameId) => {
-  const response = await httpClient.get(`/api/games/${id}`)
+  const response = await httpClient.get<Game>(`/api/games/${id}`)
   return response.data
 }
 

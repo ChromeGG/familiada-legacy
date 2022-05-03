@@ -10,6 +10,7 @@ import {
   ClientToServerEvents,
   Player,
   ServerToClientEvents,
+  Team,
 } from '@familiada/shared-interfaces'
 import { Hydrate, QueryClientProvider } from 'react-query'
 import { queryClient } from '../core/httpClient'
@@ -36,11 +37,10 @@ function CustomApp({ Component, pageProps }: AppProps) {
       // console.log('Socket ID', newSocket.id)
     })
 
-    newSocket.on('userJoined', (user) => {
-      const data = client.getQueryData(['team', user.teamId])
-      data.players = [...data.players, user]
-      data.playersIds = [...data.playersIds, user.entityId]
-      client.setQueryData(['team', user.teamId], data)
+    newSocket.on('playerJoined', (player) => {
+      const data = client.getQueryData<Team>(['team', player.teamId])
+      data.players = [...data.players, player]
+      client.setQueryData(['team', player.teamId], data)
     })
 
     // // update chat on new message dispatched
@@ -49,7 +49,9 @@ function CustomApp({ Component, pageProps }: AppProps) {
     //   setChat([...chat])
     // })
 
-    if (newSocket) return () => newSocket.disconnect()
+    if (newSocket) {
+      return () => newSocket.disconnect()
+    }
   }, [])
 
   return (

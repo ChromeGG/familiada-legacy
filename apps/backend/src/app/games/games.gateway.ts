@@ -33,7 +33,7 @@ export class GamesGateway {
     //
     // To ustawia w round[0].firstAnswerHit: Adam
     // this.gamesService.registerUserHit()
-    this.server.emit('userJoined', user)
+    this.server.emit('playerJoined', user)
   }
 
   @SubscribeMessage('join')

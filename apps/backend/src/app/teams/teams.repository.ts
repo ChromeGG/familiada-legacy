@@ -1,6 +1,6 @@
 export { Team } from '@familiada/shared-interfaces'
 import { Inject, Injectable } from '@nestjs/common'
-import { Client, Entity, EntityData, Schema } from 'redis-om'
+import { Client, Entity, Schema } from 'redis-om'
 import { JsonRepository } from 'redis-om/dist/repository/repository'
 
 class Team extends Entity {}

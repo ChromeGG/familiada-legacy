@@ -1,4 +1,10 @@
-import { PlayerId, TeamId } from '@familiada/shared-interfaces'
+import {
+  GameId,
+  PlayerId,
+  Team,
+  TeamColor,
+  TeamId,
+} from '@familiada/shared-interfaces'
 import { Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { PlayersService } from '../players/players.service'
 import { CreateTeamDto } from './dto/create-team.dto'
@@ -17,19 +23,25 @@ export class TeamsService {
     return this.teamsRepository.createAndSave({ color, gameId, playersIds })
   }
 
-  async findById(id: TeamId): Promise<any> {
-    const team = await this.teamsRepository.fetch(id)
+  async findById(id: TeamId): Promise<Team> {
+    const entity = await this.teamsRepository.fetch(id)
 
-    if (!team) {
+    if (!entity) {
       throw new NotFoundException(`Team with id ${id} not found`)
     }
 
-    // @ts-ignore
-    team.entityData.players = await this.playersService.findByIds(
-      <PlayerId[]>team.entityData.playersIds
+    const players = await this.playersService.findByIds(
+      <PlayerId[]>entity.entityData.playersIds
     )
 
-    return team.entityData
+    const team: Team = {
+      id: <TeamId>entity.entityId,
+      color: entity.entityData.color as TeamColor,
+      gameId: <GameId>entity.entityData.gameId,
+      lastAnsweringPlayerId: <PlayerId>entity.entityData.lastAnsweringPlayerId,
+      players: players,
+    }
+    return team
   }
 
   async joinToTeam({
@@ -46,6 +58,7 @@ export class TeamsService {
     }
 
     // TODO TS error, but it's working
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     team.entityData.playersIds.push(playerId)
     await this.teamsRepository.save(team)

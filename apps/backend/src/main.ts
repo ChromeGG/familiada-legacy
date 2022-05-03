@@ -15,7 +15,6 @@ export async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }))
   // TODO do it better
   app.enableCors()
-  console.log('NestFactory.create()')
   const port = process.env.PORT || 3333
   await app.listen(port)
   Logger.log(

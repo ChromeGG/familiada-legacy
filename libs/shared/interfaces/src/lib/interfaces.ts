@@ -14,7 +14,8 @@ export interface Player {
 }
 
 export type Game = {
-  id: string
+  id: GameId
+  name: string
   supervisorId: PlayerId
   teamRedId: TeamId
   teamBlueId: TeamId
@@ -32,18 +33,17 @@ export type Game = {
 
 export interface Team {
   id: TeamId
-  gameName: string
+  gameId: GameId
   color: TeamColor
   lastAnsweringPlayerId: PlayerId
-  playersIds: PlayerId[]
+  players: Player[]
 }
 
 export type ClientToServerEvents = {
-  join: (user: Player) => void
-  answer: (user: Player) => void
+  answer: (player: Player) => void
 }
 
-export type ServerToClientEvents = { userJoined: (user: Player) => void }
+export type ServerToClientEvents = { playerJoined: (player: Player) => void }
 
 export type AppSocket = Socket<ServerToClientEvents, ClientToServerEvents>
 

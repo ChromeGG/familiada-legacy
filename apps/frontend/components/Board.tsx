@@ -12,7 +12,6 @@ import Close from 'mdi-material-ui/Close'
 import useTranslation from 'next-translate/useTranslation'
 
 const Board = () => {
-  // TODO fix fontFamily={`"Press Start 2P"`}
   const { t } = useTranslation()
 
   const answers = [

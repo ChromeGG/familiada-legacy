@@ -15,11 +15,13 @@ import { io, Socket } from 'socket.io-client'
 import { config } from '../configuration'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import { SocketContext } from '../contexts/Socket'
+import { SnackbarProvider } from 'notistack'
 
 const { apiUrl } = config
 
 function CustomApp({ Component, pageProps }: AppProps) {
   const [client] = useState(() => queryClient)
+  // const
   const [socket, setSocket] =
     useState<Socket<ServerToClientEvents, ClientToServerEvents>>(null)
 
@@ -67,8 +69,10 @@ function CustomApp({ Component, pageProps }: AppProps) {
         <Hydrate state={pageProps.dehydratedState}>
           <SocketContext.Provider value={{ socket, setSocket }}>
             <ThemeProvider theme={theme}>
-              <Component {...pageProps} />
-              <ReactQueryDevtools />
+              <SnackbarProvider maxSnack={3}>
+                <Component {...pageProps} />
+                <ReactQueryDevtools />
+              </SnackbarProvider>
             </ThemeProvider>
           </SocketContext.Provider>
         </Hydrate>

@@ -15,21 +15,16 @@ import { getTeam, useGetTeam } from '../api/team'
 import JoinToGameFrom from '../components/JoinToGameFrom'
 import { useMe } from '../contexts/Me'
 import { NextSeo } from 'next-seo'
+import StageArea from '../components/stages/StageArea'
 
 interface Props {
   game: Game
 }
 export function GameView({ game }: Props) {
-  const { t } = useTranslation()
   const [me] = useMe()
 
   const { data: teamRed } = useGetTeam(game.teamRedId)
   const { data: teamBlue } = useGetTeam(game.teamBlueId)
-
-  const [isAnswering, toggleIsAnswering] = useToggle()
-  const hitAnswerButton = () => {
-    toggleIsAnswering()
-  }
 
   return (
     <Container maxWidth="xl" disableGutters>
@@ -39,16 +34,7 @@ export function GameView({ game }: Props) {
           <Board />
         </Grid>
         <Grid item xs={12}>
-          <Question />
-        </Grid>
-        <Grid item xs={12}>
-          {isAnswering ? (
-            <AnswerField />
-          ) : (
-            <Button variant="contained" onClick={hitAnswerButton}>
-              {t`answer_to_question`}!
-            </Button>
-          )}
+          <StageArea game={game} />
         </Grid>
         <Grid item container xs={12} p={2} spacing={2}>
           <Grid item xs={6}>

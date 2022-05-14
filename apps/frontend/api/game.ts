@@ -5,7 +5,7 @@ import {
   JoinToGameDTO,
   Player,
 } from '@familiada/shared-interfaces'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { httpClient } from '../core/httpClient'
 
 export type ServerStateKeys = 'game'
@@ -17,6 +17,10 @@ export const getGame = async (id: GameId) => {
 
 export const useGetGame = (id: GameId) => {
   return useQuery(['game', id], () => getGame(id))
+}
+export const useGame = () => {
+  const client = useQueryClient()
+  return client.getQueryData<Game>('game')
 }
 
 export const useCreateGameMutation = () =>

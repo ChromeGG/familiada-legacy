@@ -10,4 +10,5 @@ export const SocketContext = createContext<SocketContextI>({
   socket: null,
   setSocket: () => '',
 })
-export const useSocketContext = () => useContext<SocketContextI>(SocketContext)
+
+export const useSocket = () => useContext<SocketContextI>(SocketContext)

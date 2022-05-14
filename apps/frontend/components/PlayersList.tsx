@@ -9,7 +9,7 @@ import {
 } from '@mui/material'
 import useTranslation from 'next-translate/useTranslation'
 import { ShieldCrownOutline } from 'mdi-material-ui'
-import { useMe } from '../contexts/Me'
+import { useGame } from '../api/game'
 
 interface Props {
   team: Team
@@ -17,7 +17,7 @@ interface Props {
 
 const PlayersList = ({ team }: Props) => {
   const { t } = useTranslation()
-  const [me] = useMe()
+  const game = useGame()
 
   return (
     <Card>
@@ -25,7 +25,7 @@ const PlayersList = ({ team }: Props) => {
       <CardContent>
         <List>
           {team.players.map((player) => {
-            const isSupervisor = player.id === 1 //game.supervisorId
+            const isSupervisor = player.id === game.supervisorId
             return (
               <ListItem key={player.name}>
                 <ListItemText>

@@ -40,6 +40,7 @@ export interface Team {
 }
 
 export type ClientToServerEvents = {
+  startGame: () => void
   answer: (player: Player) => void
 }
 

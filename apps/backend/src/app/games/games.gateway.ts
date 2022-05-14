@@ -19,8 +19,25 @@ export class GamesGateway {
   @WebSocketServer()
   server: Server<ClientToServerEvents, ServerToClientEvents>
 
+  @SubscribeMessage('startGame')
+  async startGame(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() message: string
+  ) {
+    // console.log('Clienti', client)
+    console.log(message)
+    // console.log(await this.server.allSockets())
+    // this.server.to().emit('message', message)
+  }
+
   @SubscribeMessage('answer')
-  handleMessage(@MessageBody() message: string): void {
+  async handleMessage(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() message: string
+  ) {
+    console.log('Clienti', client)
+    console.log(message)
+    console.log(await this.server.allSockets())
     // this.server.to().emit('message', message)
   }
 

@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import {
   Button,
   Card,
@@ -7,13 +6,7 @@ import {
   CardActions,
   Container,
 } from '@mui/material'
-import { Socket } from 'socket.io-client'
-import {
-  ClientToServerEvents,
-  ServerToClientEvents,
-  Player,
-  CreateGameDTO,
-} from '@familiada/shared-interfaces'
+import { CreateGameDTO } from '@familiada/shared-interfaces'
 import {
   FormContainer,
   RadioButtonGroup,
@@ -31,12 +24,10 @@ import { NextSeo } from 'next-seo'
 export function Index() {
   const { t } = useTranslation()
   const form = useCreateGameForm()
-  const [socket, setSocket] =
-    useState<Socket<ServerToClientEvents, ClientToServerEvents>>(null)
   const router = useRouter()
   const createGame = useCreateGameMutation()
   const client = useQueryClient()
-  const [_, setMe2] = useMe()
+  const [_, setMe] = useMe()
 
   const useCreateGameHandler = async ({
     gameName,
@@ -50,26 +41,9 @@ export function Index() {
     })
 
     const me = await client.fetchQuery('me', () => getPlayer(game.supervisorId))
-    // setMe(me)
-    setMe2({ ...me, isSupervisor: true })
+    setMe({ ...me, isSupervisor: true })
 
     router.push(`/${gameName}`)
-
-    // const newSocket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
-    //   `http://${window.location.hostname}:3333`
-    // )
-    // setSocket(newSocket)
-    // setPlayer({ id: newSocket.id, name: playerName, team })
-    // newSocket.on('userJoined', (sth) => {
-    //   // setPlayer((prevPlayers) => [...prevPlayers, sth])
-    // })
-
-    // newSocket.emit('join', localUser)
-    // setUsers((prevPlayers) => [...prevPlayers, { name, team }])
-
-    // newSocket.on('answer', (sth) => {
-    //   // setUsers((prevPlayers) => [...prevPlayers, sth])
-    // })
   }
 
   return (

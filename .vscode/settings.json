@@ -5,6 +5,7 @@
     "hookz",
     "notistack",
     "nrwl",
+    "prefetch",
     "websockets"
   ]
 }

@@ -62,7 +62,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   let game: Game
   try {
-    game = await client.fetchQuery(['game', gameId], () => getGame(gameId))
+    game = await client.fetchQuery('game', () => getGame(gameId))
   } catch (error) {
     const { type } = checkError(error)
 

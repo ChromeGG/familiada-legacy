@@ -41,7 +41,7 @@ export function Index() {
     })
 
     const me = await client.fetchQuery('me', () => getPlayer(game.supervisorId))
-    setMe({ ...me, isSupervisor: true })
+    setMe(me)
 
     router.push(`/${gameName}`)
   }

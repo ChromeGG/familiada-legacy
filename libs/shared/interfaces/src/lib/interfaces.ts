@@ -13,6 +13,8 @@ export interface Player {
   teamId: TeamId
 }
 
+export type GameStatus = 'LOBBY' | 'STARTING' | 'RUNNING' | 'FINISHED'
+
 export type Game = {
   id: GameId
   name: string
@@ -29,6 +31,9 @@ export type Game = {
       answeringUserId: PlayerId
       canHitAnswer: [PlayerId, PlayerId]
     }
+  | {
+      status: 'STARTING'
+    }
 )
 
 export interface Team {
@@ -39,12 +44,19 @@ export interface Team {
   players: Player[]
 }
 
+type ClientEvent<Input = never> = (player: Player, input?: Input) => void
+
 export type ClientToServerEvents = {
-  startGame: () => void
-  answer: (player: Player) => void
+  startGame: ClientEvent<GameId>
+  startRound: ClientEvent
+  answer: ClientEvent<string>
 }
 
-export type ServerToClientEvents = { playerJoined: (player: Player) => void }
+export type ServerToClientEvents = {
+  playerJoin: (player: Player) => void
+  gameStart: (game: Game) => void
+  roundStart: () => void // there should be answer which players are allowed to answer
+}
 
 export type AppSocket = Socket<ServerToClientEvents, ClientToServerEvents>
 

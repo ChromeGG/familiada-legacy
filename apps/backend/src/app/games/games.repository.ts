@@ -4,6 +4,7 @@ import { JsonRepository } from 'redis-om/dist/repository/repository'
 import {
   Game as GameI,
   GameId,
+  GameStatus,
   PlayerId,
   RoundNumber,
   TeamId,
@@ -16,7 +17,7 @@ interface Game {
   answeringUserId: PlayerId
   canHitAnswer: [PlayerId, PlayerId]
   name: string
-  status: 'LOBBY' | 'RUNNING' | 'FINISHED'
+  status: GameStatus
   teamRedId: TeamId
   teamBlueId: TeamId
   supervisorId: PlayerId

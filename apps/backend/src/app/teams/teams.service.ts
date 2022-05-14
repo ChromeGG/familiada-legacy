@@ -50,7 +50,7 @@ export class TeamsService {
   }: {
     teamId: TeamId
     playerId: PlayerId
-  }) {
+  }): Promise<Team> {
     const team = await this.teamsRepository.fetch(teamId)
 
     if (!team || isEmpty(team.entityData)) {
@@ -62,6 +62,15 @@ export class TeamsService {
     // @ts-ignore
     team.entityData.playersIds.push(playerId)
     await this.teamsRepository.save(team)
+
+    return {
+      id: <TeamId>team.entityId,
+      color: team.entityData.color as TeamColor,
+      gameId: <GameId>team.entityData.gameId,
+      lastAnsweringPlayerId: <PlayerId>team.entityData.lastAnsweringPlayerId,
+      // TODO fetch players
+      players: [],
+    }
   }
 
   update(id: number, updateTeamDto: UpdateTeamDto) {

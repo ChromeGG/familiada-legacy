@@ -13,6 +13,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common'
+import { isEmpty } from 'ramda'
 import { PlayersService } from '../players/players.service'
 import { TeamsService } from '../teams/teams.service'
 import { GamesGateway } from './games.gateway'
@@ -105,8 +106,13 @@ export class GamesService {
 
     const player = await this.playersService.create({ name, teamId })
 
-    this.teamsService.joinToTeam({ teamId, playerId: player.id })
-    this.gamesGateway.server.emit('playerJoined', player)
+    const { gameId } = await this.teamsService.joinToTeam({
+      teamId,
+      playerId: player.id,
+    })
+
+    // ! NEXT: ogarnąć dołączenie do pokojów (prawdopodobnie podczas dołączania trzeba .join(game.name))
+    this.gamesGateway.server.to(gameId).emit('playerJoin', player)
 
     return player
   }
@@ -136,5 +142,23 @@ export class GamesService {
     }
 
     return game
+  }
+
+  async startGame(gameId: GameId): Promise<void> {
+    const game = await this.gamesRepository.fetch(gameId)
+
+    if (isEmpty(game.entityData)) {
+      throw new NotFoundException(`Game with id ${gameId} not found`)
+    }
+
+    // TODO add validation, is player supervisor in this game?
+
+    game.status = 'STARTING'
+    await this.gamesRepository.save(game)
+
+    console.log('~ game.name', game.name)
+    this.gamesGateway.server.to(game.name).emit('gameStart', game)
+
+    // return entityData
   }
 }

@@ -32,7 +32,7 @@ const JoinToGameFrom = ({ game }: Props) => {
     const teamId = team === 'RED' ? game.teamRedId : game.teamBlueId
     const me = await joinToGame.mutateAsync({ name, teamId })
     client.setQueryData('me', me)
-    setMe({ ...me, isSupervisor: false })
+    setMe(me)
   }
 
   return (

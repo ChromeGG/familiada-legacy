@@ -13,6 +13,8 @@ import { config } from '../../configuration'
 import { useSnackbar } from 'notistack'
 import useTranslation from 'next-translate/useTranslation'
 import { useSocket } from '../../contexts/Socket'
+import { useMe } from '../../contexts/Me'
+import { useGame } from '../../api/game'
 
 const { frontendUrl } = config
 
@@ -20,6 +22,8 @@ const LobbyStage = () => {
   const { asPath } = useRouter()
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
+  const [me] = useMe()
+  const game = useGame()
   const invitationLink = `${frontendUrl}${asPath}`
 
   const { socket } = useSocket()
@@ -33,10 +37,10 @@ const LobbyStage = () => {
   }
 
   const startGame = () => {
-    socket.emit('startGame', 'start')
-    // ! next: jakiś sposób na przekazywanie usera pomiędzy serwerem a klientem
-    // emit that game will start soon
+    socket.emit('startGame', me, game.id)
   }
+
+  const isSupervisor = me?.id === game.supervisorId
 
   return (
     <Card>
@@ -53,10 +57,14 @@ const LobbyStage = () => {
             }}
             onClick={() => copyToClipboard(invitationLink)}
           />
-          <Button
-            variant="contained"
-            onClick={() => startGame()}
-          >{t`start_game`}</Button>
+          {isSupervisor ? (
+            <Button
+              variant="contained"
+              onClick={() => startGame()}
+            >{t`start_game`}</Button>
+          ) : (
+            <Typography>{t`waiting_for_the_game_to_start_by_the_administrator`}</Typography>
+          )}
         </Stack>
       </CardContent>
     </Card>

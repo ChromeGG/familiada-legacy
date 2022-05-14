@@ -12,22 +12,23 @@ import {
   ServerToClientEvents,
   Player,
 } from '@familiada/shared-interfaces'
+import { forwardRef, Inject } from '@nestjs/common'
 
 @WebSocketGateway({ cors: '*' })
 export class GamesGateway {
-  // constructor(private readonly gamesService: GamesService) {}
+  constructor(
+    @Inject(forwardRef(() => GamesService)) private gamesService: GamesService
+  ) {}
   @WebSocketServer()
   server: Server<ClientToServerEvents, ServerToClientEvents>
 
   @SubscribeMessage('startGame')
   async startGame(
     @ConnectedSocket() client: Socket,
-    @MessageBody() message: string
+    @MessageBody()
+    [player, gameId]: Parameters<ClientToServerEvents['startGame']>
   ) {
-    // console.log('Clienti', client)
-    console.log(message)
-    // console.log(await this.server.allSockets())
-    // this.server.to().emit('message', message)
+    await this.gamesService.startGame(gameId)
   }
 
   @SubscribeMessage('answer')
@@ -50,7 +51,7 @@ export class GamesGateway {
     //
     // To ustawia w round[0].firstAnswerHit: Adam
     // this.gamesService.registerUserHit()
-    this.server.emit('playerJoined', user)
+    // this.server.emit('playerJoin', user)
   }
 
   @SubscribeMessage('join')

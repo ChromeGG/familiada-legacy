@@ -1,11 +1,7 @@
 import { Player } from '@familiada/shared-interfaces'
-import { useLocalStorageValue } from '@react-hookz/web'
-
-interface Me extends Player {
-  isSupervisor: boolean
-}
+import { useSessionStorageValue } from '@react-hookz/web'
 
 export const useMe = () =>
-  useLocalStorageValue<Me | undefined>('me', undefined, {
+  useSessionStorageValue<Player | undefined>('me', undefined, {
     initializeWithStorageValue: false,
   })

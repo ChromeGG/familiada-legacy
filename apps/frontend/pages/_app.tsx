@@ -21,7 +21,7 @@ const { apiUrl } = config
 
 function CustomApp({ Component, pageProps }: AppProps) {
   const [client] = useState(() => queryClient)
-  // const
+
   const [socket, setSocket] =
     useState<Socket<ServerToClientEvents, ClientToServerEvents>>(null)
 
@@ -35,17 +35,19 @@ function CustomApp({ Component, pageProps }: AppProps) {
       console.log('Socket ID', newSocket.id)
     })
 
-    newSocket.on('playerJoined', (player) => {
+    newSocket.on('playerJoin', (player) => {
       const data = client.getQueryData<Team>(['team', player.teamId])
       data.players = [...data.players, player]
       client.setQueryData(['team', player.teamId], data)
     })
 
-    // // update chat on new message dispatched
-    // socket.on('message', (message: IMsg) => {
-    //   chat.push(message)
-    //   setChat([...chat])
-    // })
+    newSocket.on('gameStart', (game) => {
+      // const data = client.getQueryData<Team>(['team', player.teamId])
+      // data.players = [...data.players, player]
+      // client.setQueryData(['team', player.teamId], data)
+      console.log('~ game111', game)
+      // client.setQueryData('game', )
+    })
 
     if (newSocket) {
       return () => newSocket.disconnect()
